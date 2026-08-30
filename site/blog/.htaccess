@@ -1,0 +1,32 @@
+# نشانی‌های وبلاگ
+#
+# نشانی بخشی از محتواست: /blog/راهنمای-آزمون-آیلتس کلیدواژه را در خودِ
+# نشانی دارد، و ?slug= ندارد. گوگل هر دو را می‌خواند ولی اولی را در
+# نتیجه نشان می‌دهد و آدم هم رویش کلیک می‌کند.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /blog/
+
+  # فایل و پوشهٔ واقعی دست‌نخورده می‌مانند (تصویرها، CSS)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  RewriteRule ^feed\.xml$    feed.php    [L]
+  RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+  # /blog/c/<دسته>
+  RewriteRule ^c/([^/]+)/?$ index.php?c=$1 [L,QSA]
+
+  # /blog/<نشانی-نوشته>
+  RewriteRule ^([^/]+)/?$ post.php?slug=$1 [L,QSA]
+</IfModule>
+
+# پوشهٔ بارگذاری فقط تصویر می‌دهد، هرگز اجرا نمی‌کند.
+#
+# اگر کسی روزی فایلی با پسوند .php آنجا بگذارد — از راه یک اشکال در
+# اعتبارسنجی آپلود — بدون این بلوک روی سرور اجرا می‌شد.
+<IfModule mod_php.c>
+  php_flag engine off
+</IfModule>

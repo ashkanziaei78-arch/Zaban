@@ -64,4 +64,19 @@ db()->prepare('UPDATE app_user SET last_login_at = ? WHERE id = ?')->execute([no
 issue_session((string)$u['id']);
 audit('login.password', (string)$u['id'], []);
 
-ok(['user' => ['name' => $u['full_name'], 'role' => $u['role']]]);
+// نقشِ واقعی از عضویت می‌آید، نه از ستون app_user.role که فقط یادگاری ثبت‌نام است
+// (همان کاری که otp-verify.php می‌کند — وگرنه کاربری که نقشش در پنل سوپرادمین
+// عوض شده، با ورود از راه رمز به نمای اشتباه می‌رود)
+$st = db()->prepare(
+    'SELECT m.role, i.name FROM membership m JOIN institute i ON i.id = m.institute_id
+      WHERE m.user_id = ? AND m.status = ? ORDER BY m.created_at ASC LIMIT 1'
+);
+$st->execute([$u['id'], 'active']);
+$mem = $st->fetch();
+
+ok(['user' => [
+    'name'         => $u['full_name'],
+    'role'         => $mem ? (string)$mem['role'] : (string)$u['role'],
+    'institute'    => $mem ? (string)$mem['name'] : null,
+    'hasWorkspace' => (bool)$mem,
+]]);

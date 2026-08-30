@@ -1,5 +1,5 @@
 # فقط نقاط پایانی باید از بیرون قابل فراخوانی باشند
-<FilesMatch "^(_bootstrap|_sms|_ctx|_admin|_creds|_schema|config|config\.sample)\.php$">
+<FilesMatch "^(_bootstrap|_sms|_ctx|_settings|_creds|_schema|config|config\.sample)\.php$">
   Require all denied
 </FilesMatch>
 <FilesMatch "\.(sql|md|log|bak|sample)$">

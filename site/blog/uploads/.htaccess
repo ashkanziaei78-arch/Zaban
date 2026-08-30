@@ -1,0 +1,9 @@
+# هیچ چیزی اینجا اجرا نمی‌شود — فقط فایل ایستا سرو می‌شود.
+<IfModule mod_php.c>
+  php_flag engine off
+</IfModule>
+<FilesMatch "\.(php|phtml|php[0-9]|phar|cgi|pl|py|sh|htaccess)$">
+  Require all denied
+</FilesMatch>
+Options -Indexes -ExecCGI
+AddType text/plain .php .phtml .php5 .php7 .phar

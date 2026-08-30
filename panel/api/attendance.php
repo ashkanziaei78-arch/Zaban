@@ -14,7 +14,8 @@
  */
 declare(strict_types=1);
 require __DIR__ . '/_bootstrap.php';
-require __DIR__ . '/_ctx.php';
+require_once __DIR__ . '/_ctx.php';
+require_once __DIR__ . '/_perm.php';
 
 require_post();
 $in     = body_json();
@@ -39,6 +40,34 @@ case 'get':
         [$s['id'], $cl['id'], 'active']
     );
 
+    /*
+     * شمار غیبتِ هر نفر تا امروز، در همین کلاس.
+     *
+     * مدرس موقع زدن «غایب» باید بداند این چندمین غیبت است. بدون آن،
+     * زبان‌آموزی که دارد از کلاس می‌افتد فقط وقتی دیده می‌شود که
+     * گزارش پایان ترم را کسی باز کند — یعنی وقتی دیگر کاری نمی‌شود
+     * کرد.
+     *
+     * یک پرس‌وجوی گروهی برای کل کلاس، نه یکی به‌ازای هر نفر: کلاس
+     * بیست‌نفره یعنی بیست رفت‌وبرگشت به دیتابیس در هر بار باز کردن
+     * صفحه، آن هم روی هاست اشتراکی.
+     */
+    $absRows = t_all(
+        "SELECT a.student_user_id AS uid, a.status AS st, COUNT(*) AS n
+           FROM attendance a JOIN class_session cs ON cs.id = a.session_id
+          WHERE a.__I__ AND cs.class_id = ? AND a.session_id <> ?
+          GROUP BY a.student_user_id, a.status",
+        [$cl['id'], $s['id']]);
+    $absent = [];
+    $late   = [];
+    $seen   = [];
+    foreach ($absRows as $r) {
+        $u = (string)$r['uid'];
+        $seen[$u] = ($seen[$u] ?? 0) + (int)$r['n'];
+        if ($r['st'] === 'absent') $absent[$u] = (int)$r['n'];
+        if ($r['st'] === 'late')   $late[$u]   = (int)$r['n'];
+    }
+
     ok([
         'session' => [
             'id'     => (string)$s['id'],
@@ -55,12 +84,16 @@ case 'get':
             'status' => $r['status'] ?: 'present',
             'saved'  => $r['status'] !== null,
             'note'   => $r['note'],
+            // تا پیش از این جلسه، در همین کلاس
+            'absences' => $absent[(string)$r['id']] ?? 0,
+            'lates'    => $late[(string)$r['id']] ?? 0,
+            'marked'   => $seen[(string)$r['id']] ?? 0,
         ], $rows),
     ]);
 
 /* ─────────── ثبت ─────────── */
 case 'save':
-    require_role('manager', 'teacher');
+    require_perm('attendance.write');
     $s  = own('class_session', s_in($in, 'id', 32), 'جلسه');
     $cl = own_class((string)$s['class_id']);
 
@@ -110,7 +143,7 @@ case 'save':
 /* ─────────── تاریخچهٔ یک زبان‌آموز ─────────── */
 case 'student':
     $uid = s_in($in, 'studentId', 32) ?: my_id();
-    if ($uid !== my_id()) require_role('manager', 'teacher');
+    require_perm_on_user('attendance.view', $uid);
 
     $rows = t_all(
         'SELECT a.status, a.marked_at, s.session_date, s.seq, k.name AS class_name

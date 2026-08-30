@@ -1,0 +1,2473 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F7F3E8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131A17" media="(prefers-color-scheme: dark)">
+<title>تاکورا | سوپرادمین پلتفرم</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="same-origin">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232C5A4A'/%3E%3Ctext x='32' y='45' font-size='34' font-family='Tahoma,sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3E%D8%A7%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="fonts/dana-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/dana-bold.woff2" as="font" type="font/woff2" crossorigin>
+
+<style>
+/* ═══════════════════════════════════════════════════════════
+   TALKORA — سوپرادمین پلتفرم (admin.talkora.ir)
+   عمداً از پنل آموزشگاه‌ها و از سایت معرفی جداست: نشست جدا، رمز جدا،
+   زیردامنهٔ جدا. زبان طراحی همان پنل محصول قدیمی است — رنگ سرمه‌ای
+   تیره — تا هیچ‌وقت با پنل آبیِ آموزشگاه اشتباه نشود.
+   ═══════════════════════════════════════════════════════════ */
+
+@font-face{font-family:"Dana";src:url("fonts/dana-light.woff2") format("woff2");font-weight:300;font-display:swap}
+@font-face{font-family:"Dana";src:url("fonts/dana-regular.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Dana";src:url("fonts/dana-bold.woff2") format("woff2");font-weight:700;font-display:swap}
+
+:root{
+  --paper:#F7F3E8; --surface:#FCFAF3; --surface-2:#F1EBDC; --surface-3:#E7E0CE;
+  --ink:#24352F; --ink-2:#46574F; --ink-3:#6B7C74;
+  --line:#DDE5DC; --line-2:#C6D2C6;
+  --brand:#2C5A4A; --brand-2:#3F7D68; --brand-soft:#C9EDE1; --brand-mid:#A9DDC9; --accent-ink:#8A6520; --ring:rgba(63,125,104,.3);
+  --ok:#1F7A52; --ok-soft:#DCF0E6;
+  --warn:#8A6520; --warn-soft:#F6EBD5;
+  --bad:#A83A2C; --bad-soft:#F7E3DF;
+  --r1:9px; --r2:14px;
+  --sh:0 1px 2px rgba(36,53,47,.05),0 2px 8px rgba(36,53,47,.05);
+  --sh-l:0 22px 56px rgba(36,53,47,.18);
+}
+@media (prefers-color-scheme:dark){:root{
+  --paper:#131A17; --surface:#1B2420; --surface-2:#222D28; --surface-3:#2B3832;
+  --ink:#ECF2EE; --ink-2:#BFCCC5; --ink-3:#8E9E96;
+  --line:#2B3832; --line-2:#3A4A42;
+  --brand:#C9EDE1; --brand-2:#A9DDC9; --brand-soft:#1E322A; --brand-mid:#6FAF95; --accent-ink:#E8C98F; --ring:rgba(169,221,201,.34);
+  --ok:#7FD1AC; --ok-soft:#17332A;
+  --warn:#E0B96A; --warn-soft:#2E2718;
+  --bad:#F0897E; --bad-soft:#34201D;
+  --sh:0 1px 2px rgba(0,0,0,.45); --sh-l:0 22px 56px rgba(0,0,0,.62);
+}}
+:root[data-theme="dark"]{
+  --paper:#131A17; --surface:#1B2420; --surface-2:#222D28; --surface-3:#2B3832;
+  --ink:#ECF2EE; --ink-2:#BFCCC5; --ink-3:#8E9E96;
+  --line:#2B3832; --line-2:#3A4A42;
+  --brand:#C9EDE1; --brand-2:#A9DDC9; --brand-soft:#1E322A; --brand-mid:#6FAF95; --accent-ink:#E8C98F; --ring:rgba(169,221,201,.34);
+  --ok:#7FD1AC; --ok-soft:#17332A;
+  --warn:#E0B96A; --warn-soft:#2E2718;
+  --bad:#F0897E; --bad-soft:#34201D;
+  --sh:0 1px 2px rgba(0,0,0,.45); --sh-l:0 22px 56px rgba(0,0,0,.62);
+}
+:root[data-theme="light"]{
+  --paper:#F7F3E8; --surface:#FCFAF3; --surface-2:#F1EBDC; --surface-3:#E7E0CE;
+  --ink:#24352F; --ink-2:#46574F; --ink-3:#6B7C74;
+  --line:#DDE5DC; --line-2:#C6D2C6;
+  --brand:#2C5A4A; --brand-2:#3F7D68; --brand-soft:#C9EDE1; --brand-mid:#A9DDC9; --accent-ink:#8A6520;
+  --ok:#1F7A52; --ok-soft:#DCF0E6; --warn:#8A6520; --warn-soft:#F6EBD5;
+  --bad:#A83A2C; --bad-soft:#F7E3DF;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:"Dana",system-ui,Tahoma,sans-serif;background:var(--paper);color:var(--ink);
+     font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.num{font-variant-numeric:tabular-nums}
+button{font:inherit;cursor:pointer}
+:where(button){background:none;border:none;padding:0;color:inherit}
+input,select,textarea{font:inherit}
+a{color:var(--brand-2)}
+
+/* ── چیدمان ── */
+.shell{display:grid;grid-template-columns:236px 1fr;min-block-size:100vh}
+.side{background:var(--surface);border-inline-end:1px solid var(--line);
+      display:flex;flex-direction:column;position:sticky;top:0;block-size:100vh}
+.brand{display:flex;align-items:center;gap:10px;padding:18px 18px 16px;
+       border-block-end:1px solid var(--line);font-weight:700}
+.brand i{inline-size:32px;block-size:32px;border-radius:9px;background:var(--brand);color:#fff;
+         display:grid;place-content:center;font-size:16px;font-style:normal}
+:root[data-theme="dark"] .brand i,
+@media (prefers-color-scheme:dark){.brand i{color:#131A17}}
+.brand small{display:block;font-weight:400;font-size:11.5px;color:var(--ink-3);line-height:1.4}
+nav{padding:10px 8px;flex:1;overflow:auto}
+nav button{display:flex;align-items:center;gap:9px;inline-size:100%;text-align:start;
+           padding:9px 11px;border-radius:var(--r1);font-size:14px;color:var(--ink-2);margin-block-end:2px}
+nav button:hover{background:var(--surface-2)}
+nav button.on{background:var(--brand-soft);color:var(--brand-2);font-weight:700}
+nav .grp{font-size:11px;color:var(--ink-3);padding:14px 11px 5px;font-weight:700;letter-spacing:.02em}
+.side-f{padding:12px;border-block-start:1px solid var(--line);display:flex;gap:8px;align-items:center}
+.side-f .who{flex:1;min-inline-size:0;font-size:13px}
+.side-f .who b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.side-f .who span{color:var(--ink-3);font-size:11.5px}
+
+.main{min-inline-size:0;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:12px;padding:14px 22px;background:var(--surface);
+     border-block-end:1px solid var(--line);position:sticky;top:0;z-index:5}
+.top h1{font-size:17px;margin:0;flex:1}
+.page{padding:22px;max-inline-size:1120px;inline-size:100%}
+
+.demo-bar{background:var(--warn-soft);color:var(--warn);border-block-end:1px solid var(--line);
+          font-size:12.5px;padding:9px 18px;text-align:center}
+.demo-bar b{color:inherit}
+
+/* ── اجزا ── */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r2);
+      box-shadow:var(--sh);margin-block-end:16px;overflow:hidden}
+.card-h{display:flex;align-items:center;gap:10px;padding:14px 18px;border-block-end:1px solid var(--line)}
+.card-h h3{margin:0;font-size:15px;flex:1}
+.card-b{padding:18px}
+.hint{display:block;font-size:12.5px;color:var(--ink-3);margin-block-start:5px;line-height:1.7}
+.muted{color:var(--ink-3)}
+.back{font-size:13px;color:var(--brand-2);margin-block-end:12px;display:inline-flex;align-items:center;gap:5px}
+
+.grid{display:grid;gap:14px}
+.grid>*{min-inline-size:0}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r2);padding:15px 16px}
+.kpi .l{font-size:12.5px;color:var(--ink-3)}
+.kpi .v{font-size:25px;font-weight:700;line-height:1.35;margin-block-start:3px}
+.kpi .d{font-size:12.5px;color:var(--ink-3)}
+
+.fld{margin-block-end:15px}
+.fld .rq{color:var(--bad)}
+.row{display:flex;flex-wrap:wrap}
+.au-err{margin-block:2px 14px;padding:10px 12px;border-radius:10px;font-size:13.5px;
+  background:var(--bad-soft);color:var(--bad);border:1px solid currentColor}
+.seg-picks{display:flex;flex-wrap:wrap;gap:8px}
+.jsel{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:7px}
+.jsel select{inline-size:100%}
+/* ── ویرایشگر وبلاگ ── */
+.ed-bar{display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:7px 8px;
+  border:1px solid var(--line-2);border-block-end:none;
+  border-radius:10px 10px 0 0;background:var(--surface-2)}
+.ed-bar button{padding:6px 11px;border-radius:7px;font-size:12.5px;
+  background:var(--surface);border:1px solid var(--line);color:var(--ink-2);cursor:pointer}
+.ed-bar button:hover{border-color:var(--brand-2);color:var(--ink)}
+.ed-bar .sep{inline-size:1px;block-size:20px;background:var(--line-2);margin-inline:4px}
+.ed{min-block-size:340px;max-block-size:60vh;overflow-y:auto;padding:16px 18px;
+  border:1px solid var(--line-2);border-radius:0 0 10px 10px;background:var(--surface);
+  line-height:2;font-size:15px}
+.ed:focus{outline:none;border-color:var(--brand-2)}
+.ed h2{font-size:21px;padding-block:14px 6px}
+.ed h3{font-size:18px;padding-block:12px 5px}
+.ed p{padding-block-end:11px}
+.ed ul,.ed ol{padding-inline-start:26px;padding-block-end:11px}
+.ed li{padding-block-end:4px}
+.ed blockquote{border-inline-start:3px solid var(--brand-2);padding-inline-start:14px;
+  margin-block:12px;color:var(--ink-2)}
+.ed img{max-inline-size:100%;height:auto;border-radius:8px;margin-block:8px}
+.ed a{color:var(--brand-2)}
+.cover-pick{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.cover-prev{inline-size:190px;aspect-ratio:16/9;object-fit:cover;border-radius:10px;
+  border:1px solid var(--line-2);flex:none}
+.empty-prev{display:grid;place-items:center;background:var(--surface-2);
+  color:var(--ink-3);font-size:12.5px}
+.seo{border:1px solid var(--line);border-radius:10px;padding:12px 14px;
+  margin-block:6px 14px;background:var(--surface-2)}
+.seo summary{cursor:pointer;font-weight:700;font-size:14px}
+.jsel select{inline-size:100%}
+.aud{padding:9px 13px;border:1.5px solid var(--line-2);border-radius:10px;text-align:start;
+  background:var(--surface);font:inherit;color:inherit;cursor:pointer}
+.aud:hover:not([disabled]){border-color:var(--brand-2)}
+.aud[disabled]{opacity:.45;cursor:not-allowed}
+.aud.on{border-color:var(--brand-2);background:var(--brand-soft)}
+.aud b{display:block;font-size:13.5px}
+.aud small{display:block;font-size:11.5px;color:var(--ink-3);margin-block-start:2px}
+.kind-picks{display:flex;gap:7px;flex-wrap:wrap}
+.kind{padding:8px 15px;border:1.5px solid var(--line-2);border-radius:100px;background:var(--surface);
+  font:inherit;font-size:13px;color:var(--ink-3);cursor:pointer}
+.kind:hover{border-color:var(--brand-2)}
+.kind.on{font-weight:700;border-color:currentColor}
+.kind.on.nk-info{background:var(--surface-2);color:var(--ink)}
+.kind.on.nk-success{background:var(--ok-soft);color:var(--ok)}
+.kind.on.nk-warn{background:var(--warn-soft);color:var(--warn)}
+.kind.on.nk-urgent{background:var(--bad-soft);color:var(--bad)}
+.ntf-i{display:inline-grid;place-items:center;inline-size:22px;block-size:22px;border-radius:50%;
+  font-size:11.5px;font-weight:700;margin-inline-end:6px;vertical-align:-4px}
+.nk-info{background:var(--surface-2);color:var(--ink)}
+.nk-ok{background:var(--ok-soft);color:var(--ok)}
+.nk-warn{background:var(--warn-soft);color:var(--warn)}
+.nk-bad{background:var(--bad-soft);color:var(--bad);font-size:10.5px;letter-spacing:-1px}
+.fld label{display:block;font-size:13.5px;font-weight:700;margin-block-end:6px}
+.fld input,.fld select,.fld textarea{inline-size:100%;padding:10px 12px;border:1px solid var(--line-2);
+  border-radius:var(--r1);background:var(--surface);color:var(--ink);min-block-size:44px}
+.fld textarea{min-block-size:90px;resize:vertical;line-height:1.8}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--brand-2);
+  box-shadow:0 0 0 3px var(--ring)}
+.rq{color:var(--bad)}
+.search{display:flex;gap:10px;margin-block-end:16px}
+.search .fld{flex:1;margin:0}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 16px;
+     border-radius:var(--r1);font-weight:700;font-size:14px;min-block-size:44px;border:1px solid transparent}
+.btn--p{background:var(--brand-2);color:#fff}
+.btn--p:hover{filter:brightness(1.07)}
+.btn--g{background:var(--surface);border-color:var(--line-2);color:var(--ink)}
+.btn--g:hover{background:var(--surface-2)}
+.btn--d{background:var(--bad-soft);color:var(--bad);border-color:currentColor}
+.btn--sm{padding:6px 11px;min-block-size:34px;font-size:13px}
+.btn--b{inline-size:100%}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+
+.pill{display:inline-block;padding:2px 9px;border-radius:100px;font-size:12px;font-weight:700}
+.p-ok{background:var(--ok-soft);color:var(--ok)}
+.p-warn{background:var(--warn-soft);color:var(--warn)}
+.p-bad{background:var(--bad-soft);color:var(--bad)}
+.p-info{background:var(--brand-soft);color:var(--brand-2)}
+.p-mute{background:var(--surface-2);color:var(--ink-3)}
+
+.tbl-wrap{overflow-x:auto}
+table{inline-size:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:start;padding:10px 14px;background:var(--surface-2);color:var(--ink-3);
+   font-size:12px;font-weight:700;white-space:nowrap}
+td{padding:11px 14px;border-block-start:1px solid var(--line);vertical-align:top}
+tr.click{cursor:pointer}
+tr.click:hover td{background:var(--surface-2)}
+
+.empty{padding:38px 22px;text-align:center;color:var(--ink-3)}
+.empty b{display:block;color:var(--ink);font-size:15px;margin-block-end:5px}
+
+.note{padding:12px 14px;border-radius:var(--r1);font-size:13.5px;line-height:1.8;margin-block-end:14px}
+.note--i{background:var(--brand-soft);color:var(--ink-2);border:1px solid var(--line)}
+.note--w{background:var(--warn-soft);color:var(--warn);border:1px solid currentColor}
+.note--e{background:var(--bad-soft);color:var(--bad);border:1px solid currentColor}
+.note--k{background:var(--ok-soft);color:var(--ok);border:1px solid currentColor}
+
+/* ── ورود ── */
+.login{min-block-size:100vh;display:grid;place-content:center;justify-items:center;padding:24px}
+.login .box{inline-size:min(410px,100%);background:var(--surface);border:1px solid var(--line);
+            border-radius:var(--r2);padding:30px 26px;box-shadow:var(--sh-l)}
+.login h1{font-size:21px;margin:0 0 6px}
+.login p.sub{color:var(--ink-3);font-size:13.5px;margin:0 0 22px;line-height:1.8}
+.login .mark{inline-size:48px;block-size:48px;border-radius:14px;background:var(--brand);color:#fff;
+             display:grid;place-content:center;font-size:22px;font-weight:700;margin-block-end:16px}
+
+/* ── نوار پیام ── */
+.toasts{position:fixed;inset-block-end:20px;inset-inline-start:20px;z-index:80;display:flex;
+        flex-direction:column;gap:8px}
+.toast{background:var(--ink);color:var(--paper);padding:11px 16px;border-radius:var(--r1);
+       font-size:13.5px;box-shadow:var(--sh-l);animation:up .22s}
+@keyframes up{from{opacity:0;transform:translateY(8px)}}
+
+.boot{position:fixed;inset:0;z-index:90;display:grid;place-content:center;background:var(--paper)}
+
+/* ── گفتگوی دلیل (impersonate / تعلیق) ── */
+.modal-bg{position:fixed;inset:0;background:rgba(6,10,18,.5);z-index:70;display:grid;place-items:center;padding:20px}
+.modal{inline-size:min(440px,100%);background:var(--surface);border-radius:var(--r2);box-shadow:var(--sh-l);
+       border:1px solid var(--line)}
+.modal .card-b{padding:20px}
+
+@media(max-width:820px){
+  .shell{grid-template-columns:1fr}
+  .side{position:static;block-size:auto;border-inline-end:none;border-block-end:1px solid var(--line)}
+  nav{display:flex;flex-wrap:wrap;gap:4px}
+  nav button{inline-size:auto}
+  nav .grp{display:none}
+  .page{padding:16px}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+
+<div class="boot" id="boot"><span class="muted">در حال بارگذاری…</span></div>
+<div id="app"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ══════════ کمکی‌ها ══════════ */
+var FA=["۰","۱","۲","۳","۴","۵","۶","۷","۸","۹"];
+function fa(n){return String(n).replace(/[0-9]/g,function(d){return FA[+d];});}
+function faG(n){return fa(String(n).replace(/\B(?=(\d{3})+(?!\d))/g,"٬"));}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function el(id){return document.getElementById(id);}
+function enDigits(s){return String(s)
+  .replace(/[۰-۹]/g,function(d){return String("۰۱۲۳۴۵۶۷۸۹".indexOf(d));})
+  .replace(/[٠-٩]/g,function(d){return String("٠١٢٣٤٥٦٧٨٩".indexOf(d));});}
+
+var J_M=["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"];
+function toJalali(gy,gm,gd){
+  var gdm=[0,31,59,90,120,151,181,212,243,273,304,334];
+  var jy=(gy<=1600)?0:979; gy-=(gy<=1600)?621:1600;
+  var gy2=(gm>2)?(gy+1):gy;
+  var days=(365*gy)+(~~((gy2+3)/4))-(~~((gy2+99)/100))+(~~((gy2+399)/400))-80+gd+gdm[gm-1];
+  jy+=33*(~~(days/12053)); days%=12053;
+  jy+=4*(~~(days/1461));   days%=1461;
+  if(days>365){jy+=~~((days-1)/365); days=(days-1)%365;}
+  var jm=(days<186)?1+~~(days/31):7+~~((days-186)/30);
+  var jd=1+((days<186)?(days%31):((days-186)%30));
+  return [jy,jm,jd];
+}
+/* ── شمسی → میلادی ──
+ *
+ * پنل سوپرادمین تا امروز فقط تاریخ *نمایش* می‌داد، پس toJalali تنها
+ * چیزی بود که لازم داشت. بازهٔ قرارداد اولین جایی است که اینجا تاریخ
+ * *گرفته* می‌شود، و ورودی شمسی است (بند P.2) در حالی که ستون میلادی
+ * است. این سه تابع همان مسیر برگشت‌اند.
+ */
+var J_MONTHS_S=["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور",
+                "مهر","آبان","آذر","دی","بهمن","اسفند"];
+function pad2(n){return n<10?"0"+n:""+n;}
+function isJLeapS(jy){var r=((jy%33)+33)%33;
+  return r===1||r===5||r===9||r===13||r===17||r===22||r===26||r===30;}
+function jMonthLenS(jy,jm){return jm<=6?31:(jm<=11?30:(isJLeapS(jy)?30:29));}
+function fromJalaliS(jy,jm,jd){
+  var gy=(jy<=979)?621:1600;
+  jy-=(jy<=979)?0:979;
+  var days=365*jy+~~(jy/33)*8+~~(((jy%33)+3)/4)+78+jd
+         +((jm<7)?(jm-1)*31:((jm-7)*30)+186);
+  gy+=400*~~(days/146097); days%=146097;
+  if(days>36524){gy+=100*~~(--days/36524); days%=36524; if(days>=365)days++;}
+  gy+=4*~~(days/1461); days%=1461;
+  if(days>365){gy+=~~((days-1)/365); days=(days-1)%365;}
+  var gd=days+1;
+  var ml=[0,31,((gy%4===0&&gy%100!==0)||(gy%400===0))?29:28,31,30,31,30,31,31,30,31,30,31];
+  var gm; for(gm=0; gm<13 && gd>ml[gm]; gm++) gd-=ml[gm];
+  return gy+"-"+pad2(gm)+"-"+pad2(gd);
+}
+
+/*
+ * سه انتخابگرِ روز/ماه/سال به‌جای تقویم کامل.
+ *
+ * تقویمِ پنل چند صد خط است و اینجا فقط دو تاریخ گرفته می‌شود. سه
+ * کشویی همان کار را می‌کند، روی موبایل هم بهتر است، و هیچ حالت
+ * نامعتبری نمی‌سازد چون روزها از خودِ ماه و سال می‌آیند.
+ */
+function jSelects(prefix, iso, fromYear){
+  var j=null;
+  if(iso){var m=String(iso).match(/^(\d{4})-(\d{2})-(\d{2})/);
+          if(m)j=toJalali(+m[1],+m[2],+m[3]);}
+  var now=new Date(), tj=toJalali(now.getFullYear(),now.getMonth()+1,now.getDate());
+  var y0=fromYear||(tj[0]-1);
+  var days=j?jMonthLenS(j[0],j[1]):31;
+  function opt(v,t,on){return '<option value="'+v+'"'+(on?" selected":"")+'>'+t+'</option>';}
+  var d="",mo="",yr="";
+  for(var i=1;i<=days;i++)   d+=opt(i,fa(i),j&&j[2]===i);
+  for(var i=0;i<12;i++)      mo+=opt(i+1,J_MONTHS_S[i],j&&j[1]===i+1);
+  for(var i=y0;i<=y0+12;i++) yr+=opt(i,fa(i),j&&j[0]===i);
+  return '<div class="jsel">'
+       + '<select id="'+prefix+'D" data-jsel="'+prefix+'"><option value="">روز</option>'+d+'</select>'
+       + '<select id="'+prefix+'M" data-jsel="'+prefix+'"><option value="">ماه</option>'+mo+'</select>'
+       + '<select id="'+prefix+'Y" data-jsel="'+prefix+'"><option value="">سال</option>'+yr+'</select>'
+       + '</div>';
+}
+
+/** مقدار میلادی سه انتخابگر، یا رشتهٔ خالی */
+function jSelVal(prefix){
+  function v(i){var n=el(prefix+i); return n?+n.value:0;}
+  var d=v("D"), m=v("M"), y=v("Y");
+  if(!d||!m||!y)return "";
+  return fromJalaliS(y,m,Math.min(d,jMonthLenS(y,m)));
+}
+
+function jDateTime(s){
+  if(!s)return "—";
+  var m=String(s).match(/^(\d{4})-(\d{2})-(\d{2})/); if(!m)return "—";
+  var j=toJalali(+m[1],+m[2],+m[3]);
+  var t=String(s).match(/(\d{2}):(\d{2})/);
+  return fa(j[2])+" "+J_M[j[1]-1]+" "+fa(j[0])+(t?"، "+fa(t[1]+":"+t[2]):"");
+}
+
+function toast(msg){
+  var d=document.createElement("div");
+  d.className="toast"; d.textContent=msg;
+  el("toasts").appendChild(d);
+  setTimeout(function(){d.remove();},4200);
+}
+
+function withTimeout(promise,ms){
+  return new Promise(function(resolve){
+    var done=false;
+    var t=setTimeout(function(){if(!done){done=true;resolve(null);}},ms);
+    promise.then(function(v){if(!done){done=true;clearTimeout(t);resolve(v);}},
+                 function(){if(!done){done=true;clearTimeout(t);resolve(null);}});
+  });
+}
+
+/* ══════════ ارتباط با سرور ══════════ */
+var API={base:"api/",admin:null,needsSetup:false,live:false};
+
+function call(body){
+  return fetch(API.base+"super.php",{
+    method:"POST",credentials:"same-origin",
+    headers:{"Content-Type":"application/json",Accept:"application/json"},
+    body:JSON.stringify(body)
+  }).then(function(r){
+    return r.json().then(function(j){return j;},function(){
+      return {ok:false,error:"bad_response",message:"پاسخ سرور خوانده نشد."};});
+  },function(){
+    return {ok:false,error:"offline",message:"ارتباط با سرور برقرار نشد."};
+  });
+}
+
+/* ══════════ وضعیت ══════════ */
+var S={view:"dash",settings:null,leads:null,stats:null,events:null,
+       codes:null,health:null,issued:null,smsTest:null,busy:false,err:"",
+       institutes:null,instQ:"",instStatus:"",instDetail:null,
+       userQ:"",userResults:null,userDetail:null,
+       userFilter:{status:"all",role:"all",instituteId:"",page:1,limit:50},
+       userMeta:null,userStats:null,userBusy:false,
+       reasonModal:null,
+       notifData:null,notifSent:[],notifBusy:false,
+       blog:null,blogEdit:null,blogBusy:false,
+       endingSoon:[],
+       notifDraft:{segment:"",title:"",body:"",kind:"info",busy:false,err:""}};
+
+var NAV=[
+  {g:"نمای‌کلی"},
+  {v:"dash",t:"پیشخوان"},
+  {g:"پلتفرم"},
+  {v:"institutes",t:"آموزشگاه‌ها"},
+  {v:"users",t:"کاربران و نقش‌ها"},
+  {v:"access",t:"نقش‌ها و مجوزها"},
+  {v:"leads",t:"درخواست‌های دمو"},
+  {v:"notify",t:"اعلان به کاربران"},
+  {g:"محتوا"},
+  {v:"blog",t:"وبلاگ"},
+  {g:"سایت"},
+  {v:"pricing",t:"قیمت‌ها"},
+  {v:"contact",t:"تماس و ایمیل"},
+  {v:"content",t:"متن‌های سایت"},
+  {v:"trust",t:"نمادها و وضعیت"},
+  {g:"سامانه"},
+  {v:"sms",t:"ورود و پیامک"},
+  {v:"health",t:"سلامت سامانه"},
+  {v:"events",t:"رویدادها"},
+  {v:"account",t:"حساب من"}
+];
+
+var TITLES={dash:"پیشخوان",institutes:"آموزشگاه‌ها",users:"کاربران و نقش‌ها",
+  leads:"درخواست‌های دموی رایگان",notify:"اعلان به کاربران",blog:"وبلاگ",pricing:"قیمت‌ها",contact:"تماس و ایمیل",
+  content:"متن‌های سایت",trust:"نمادها و وضعیت",sms:"ورود کاربران و پیامک",
+  health:"سلامت سامانه",events:"رویدادهای اخیر",account:"حساب من"};
+
+var ROLE_FA={manager:"مدیر",teacher:"مدرس",student:"زبان‌آموز"};
+
+function h(strings){var out=strings[0];
+  for(var i=1;i<arguments.length;i++){out+=arguments[i]+strings[i];} return out;}
+
+function kpi(l,v,d){
+  return '<div class="kpi"><div class="l">'+l+'</div><div class="v num">'+v+'</div>'+
+         (d?'<div class="d">'+d+'</div>':'')+'</div>';
+}
+
+/* ── ورود ── */
+function viewLogin(){
+  var setup=API.needsSetup;
+  return h`
+  <div class="login"><div class="box">
+    <div class="mark">ا</div>
+    <h1>${setup?"ساخت حساب سوپرادمین":"سوپرادمین تاکورا"}</h1>
+    <p class="sub">${setup
+      ?"هنوز هیچ سوپرادمینی ساخته نشده. برای ساخت اولین حساب، کلید راه‌اندازی را که در config.php گذاشته‌اید وارد کنید."
+      :"این پنل کل پلتفرم را اداره می‌کند، نه یک آموزشگاه را. با نام کاربری و رمز وارد شوید."}</p>
+
+    ${setup?h`
+    <div class="fld"><label for="lgKey">کلید راه‌اندازی <span class="rq">*</span></label>
+      <input id="lgKey" type="password" dir="ltr" style="text-align:end" autocomplete="off">
+      <span class="hint">همان مقدار admin_setup_key در api/config.php</span></div>
+    <div class="fld"><label for="lgName">نام شما</label>
+      <input id="lgName" type="text"></div>`:""}
+
+    <div class="fld"><label for="lgUser">نام کاربری <span class="rq">*</span></label>
+      <input id="lgUser" type="text" dir="ltr" style="text-align:end" autocomplete="username"
+             autocapitalize="off" spellcheck="false"></div>
+    <div class="fld"><label for="lgPass">رمز عبور <span class="rq">*</span></label>
+      <input id="lgPass" type="password" dir="ltr" style="text-align:end"
+             autocomplete="${setup?"new-password":"current-password"}">
+      ${setup?'<span class="hint">حداقل ۱۰ نویسه. جایی امن نگهش دارید؛ بازیابی خودکار ندارد.</span>':""}</div>
+
+    ${S.err?h`<div class="note note--e">${esc(S.err)}</div>`:""}
+
+    <button class="btn btn--p btn--b" data-a="${setup?"setup":"login"}" ${S.busy?"disabled":""}>
+      ${S.busy?"صبر کنید…":(setup?"ساخت حساب و ورود":"ورود")}</button>
+  </div></div>`;
+}
+
+/* ── پیشخوان ── */
+function viewDash(){
+  var s=S.stats;
+  if(!s)return '<div class="card"><div class="empty">در حال بارگذاری…</div></div>';
+  return h`
+  ${s.leadsNew>0?h`<div class="note note--w">
+    <b>${fa(s.leadsNew)} درخواست دموی رسیدگی‌نشده</b> —
+    <button class="btn btn--sm btn--g" data-go="leads">دیدن</button></div>`:""}
+
+  ${(S.endingSoon||[]).length?h`<div class="note note--w">
+    <b>قرارداد ${fa(S.endingSoon.length)} آموزشگاه تا دو هفتهٔ دیگر تمام می‌شود:</b>
+    ${S.endingSoon.map(function(x){
+      return esc(x.name)+" ("+(x.daysLeft===0?"امروز":fa(x.daysLeft)+" روز")+")";}).join("، ")}
+    </div>`:""}
+
+  <div class="grid g4" style="margin-block-end:16px">
+    ${kpi("آموزشگاه",fa(s.institutes),s.institutesSuspended?fa(s.institutesSuspended)+" معلق":"")}
+    ${kpi("کاربر",fa(s.users),s.usersSuspended?fa(s.usersSuspended)+" مسدود":"")}
+    ${kpi("کلاس",fa(s.classes),fa(s.published)+" منتشر شده")}
+    ${kpi("درخواست دمو",fa(s.leadsNew),"رسیدگی‌نشده")}
+  </div>
+  <div class="grid g4" style="margin-block-end:16px">
+    ${kpi("مدیر",fa(s.managers))}
+    ${kpi("مدرس",fa(s.teachers))}
+    ${kpi("زبان‌آموز",fa(s.students))}
+    ${kpi("پیامک امروز",fa(s.otpToday),"کد ورود")}
+  </div>
+  <div class="grid g3">
+    ${kpi("جلسهٔ ساخته‌شده",fa(s.sessions))}
+    ${kpi("جلسهٔ برگزارشده",fa(s.held))}
+    ${kpi("پاسخ تکلیف",fa(s.submissions))}
+  </div>
+
+  <div class="card" style="margin-block-start:16px"><div class="card-b">
+    <p class="muted" style="margin:0">
+      این عددها از کل پلتفرم‌اند. برای دیدن یک آموزشگاه مشخص، از «آموزشگاه‌ها» وارد شوید.
+      محتوای واقعی داخل هر پنل (زبان‌آموز، تکلیف، نمره) از اینجا دیده نمی‌شود — فقط با
+      «ورود به‌جای کاربر» و دلیل ثبت‌شده.
+    </p></div></div>`;
+}
+
+/* ── آموزشگاه‌ها ── */
+function statusPill(status,reason){
+  if(status==="suspended")return '<span class="pill p-bad">معلق'+(reason?' — '+esc(reason):'')+'</span>';
+  return '<span class="pill p-ok">فعال</span>';
+}
+
+function viewInstitutes(){
+  if(S.instDetail)return viewInstituteDetail();
+  return h`
+  <div class="search">
+    <div class="fld"><input id="instQ" type="text" placeholder="نام، شهر یا تلفن آموزشگاه…" value="${esc(S.instQ)}"></div>
+    <select id="instStatus" style="max-inline-size:160px;padding:10px 12px;border:1px solid var(--line-2);border-radius:var(--r1);background:var(--surface);color:var(--ink)">
+      <option value=""${S.instStatus===""?" selected":""}>همه</option>
+      <option value="active"${S.instStatus==="active"?" selected":""}>فعال</option>
+      <option value="suspended"${S.instStatus==="suspended"?" selected":""}>معلق</option>
+    </select>
+    <button class="btn btn--p" data-a="instSearch">جست‌وجو</button>
+  </div>
+  <div class="card">
+    <div class="card-h"><h3>افزودن دستی آموزشگاه</h3></div>
+    <div class="card-b">
+      <div class="grid g2">
+        <div class="fld"><label for="niName">نام آموزشگاه <span class="rq">*</span></label>
+          <input id="niName" type="text"></div>
+        <div class="fld"><label for="niCity">شهر</label><input id="niCity" type="text"></div>
+        <div class="fld"><label for="niOwnerName">نام مدیر <span class="rq">*</span></label>
+          <input id="niOwnerName" type="text"></div>
+        <div class="fld"><label for="niOwnerPhone">موبایل مدیر <span class="rq">*</span></label>
+          <input id="niOwnerPhone" type="tel" inputmode="numeric" dir="ltr" style="text-align:end" placeholder="09121234567"></div>
+      </div>
+      <button class="btn btn--g" data-a="instCreate" ${S.busy?"disabled":""}>ساخت آموزشگاه</button>
+      <span class="hint">مدیر با همین شماره وارد می‌شود؛ اگر کاربری با این شماره نبود، خودش می‌سازد.</span>
+    </div>
+  </div>
+  ${!S.institutes?'<div class="card"><div class="empty">در حال بارگذاری…</div></div>':
+    !S.institutes.length?'<div class="card"><div class="empty"><b>چیزی پیدا نشد</b></div></div>':
+    h`<div class="card"><div class="tbl-wrap"><table>
+      <thead><tr><th>نام</th><th>شهر/تلفن</th><th>اعضا</th><th>وضعیت</th><th>ساخته‌شده</th><th></th></tr></thead>
+      <tbody>${S.institutes.map(function(i){
+        return h`<tr class="click" data-openinst="${i.id}">
+          <td><b>${esc(i.name)}</b></td>
+          <td>${esc(i.city||"—")}${i.phone?'<br><span class="num" dir="ltr">'+esc(i.phone)+'</span>':''}</td>
+          <td class="num">${fa(i.managers)} مدیر · ${fa(i.teachers)} مدرس · ${fa(i.students)} زبان‌آموز</td>
+          <td>${statusPill(i.status,i.suspendedReason)}</td>
+          <td class="num">${jDateTime(i.createdAt)}</td>
+          <td><button class="btn btn--sm btn--g" data-openinst="${i.id}">مشاهده</button></td>
+        </tr>`;}).join("")}
+      </tbody></table></div></div>`}`;
+}
+
+function viewInstituteDetail(){
+  var d=S.instDetail;
+  if(!d)return '<div class="card"><div class="empty">در حال بارگذاری…</div></div>';
+  var inst=d.institute;
+  return h`
+  <button class="back" data-a="instBack">← بازگشت به فهرست آموزشگاه‌ها</button>
+  <div class="card"><div class="card-h"><h3>${esc(inst.name)}</h3>${statusPill(inst.status,inst.suspendedReason)}</div>
+    <div class="card-b">
+      <div class="grid g3">
+        <div><div class="muted" style="font-size:12.5px">شهر</div><div>${esc(inst.city||"—")}</div></div>
+        <div><div class="muted" style="font-size:12.5px">تلفن</div><div class="num" dir="ltr">${esc(inst.phone||"—")}</div></div>
+        <div><div class="muted" style="font-size:12.5px">ساخته‌شده</div><div class="num">${jDateTime(inst.createdAt)}</div></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-block-start:16px;flex-wrap:wrap">
+        ${inst.status==="suspended"
+          ? '<button class="btn btn--g" data-a="instReactivate" data-id="'+inst.id+'">رفع تعلیق</button>'
+          : '<button class="btn btn--d" data-a="instSuspend" data-id="'+inst.id+'">تعلیق آموزشگاه</button>'}
+        <button class="btn btn--sm ${inst.jitsiEnabled?"btn--p":"btn--g"}" data-a="instJitsiToggle"
+                data-id="${inst.id}" data-on="${inst.jitsiEnabled?"0":"1"}">
+          جلسهٔ میت: ${inst.jitsiEnabled?"فعال":"غیرفعال"}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3>بازهٔ قرارداد</h3>
+      ${inst.daysLeft==null?'<span class="pill p-mute">تعیین نشده</span>'
+        :inst.daysLeft<0?'<span class="pill p-bad">'+fa(-inst.daysLeft)+' روز گذشته</span>'
+        :inst.daysLeft<=14?'<span class="pill p-warn">'+fa(inst.daysLeft)+' روز مانده</span>'
+        :'<span class="pill p-ok">'+fa(inst.daysLeft)+' روز مانده</span>'}</div>
+    <div class="card-b">
+      <p class="muted" style="font-size:13px;line-height:1.9;margin-block-start:0">
+        بعد از تاریخ پایان، آموزشگاه در اولین باز کردن این پنل خودکار تعلیق می‌شود.
+        خالی گذاشتن یعنی قرارداد پایان ندارد.</p>
+      <div class="grid g2">
+        <div class="fld"><label>شروع قرارداد</label>${jSelects("wFrom",inst.activeFrom)}</div>
+        <div class="fld"><label>پایان قرارداد</label>${jSelects("wTo",inst.activeTo)}</div>
+      </div>
+      <button class="btn btn--p btn--sm" data-a="instWindow" data-id="${inst.id}">ذخیرهٔ بازه</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3>اعضا</h3></div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>نام</th><th>موبایل</th><th>نقش</th><th>وضعیت</th><th>میت</th><th></th></tr></thead>
+      <tbody>${d.members.map(function(m){
+        return h`<tr>
+          <td><b>${esc(m.name)}</b></td>
+          <td class="num" dir="ltr" style="text-align:end">${fa(m.phone)}</td>
+          <td><select data-setrole="${m.membershipId}" style="padding:5px;border-radius:7px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink)">
+            ${["manager","teacher","student"].map(function(r){
+              return '<option value="'+r+'"'+(m.role===r?" selected":"")+'>'+ROLE_FA[r]+'</option>';}).join("")}
+          </select></td>
+          <td>${m.status==="active"?'<span class="pill p-ok">فعال</span>':'<span class="pill p-mute">غیرفعال</span>'}</td>
+          <td>${m.role==="student"?"—"
+            :'<button class="btn btn--sm '+(m.canHostMeeting?"btn--p":"btn--g")+'" data-a="memMeetingToggle" data-id="'+m.membershipId+'" data-on="'+(m.canHostMeeting?"0":"1")+'">'+(m.canHostMeeting?"فعال":"غیرفعال")+'</button>'}</td>
+          <td style="white-space:nowrap">
+            ${m.status==="active"
+              ? '<button class="btn btn--sm btn--g" data-a="memSuspend" data-id="'+m.membershipId+'">تعلیق</button>'
+              : '<button class="btn btn--sm btn--g" data-a="memReactivate" data-id="'+m.membershipId+'">فعال‌سازی</button>'}
+            <button class="btn btn--sm btn--p" data-a="impStart" data-user="${m.userId}" data-inst="${inst.id}" data-name="${esc(m.name)}">ورود به‌جای کاربر</button>
+            <button class="btn btn--sm btn--d" data-a="memRemove" data-id="${m.membershipId}">حذف عضویت</button>
+          </td>
+        </tr>`;}).join("")}
+      </tbody></table></div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3>افزودن عضو تازه</h3></div>
+    <div class="card-b">
+      <div class="fld"><label for="addPhone">موبایل کاربر (باید قبلاً در پلتفرم ثبت‌نام کرده باشد) <span class="rq">*</span></label>
+        <input id="addPhone" type="tel" inputmode="numeric" dir="ltr" style="text-align:end" placeholder="09121234567"></div>
+      <div class="grid g2">
+        <div class="fld"><label for="addRole">نقش</label>
+          <select id="addRole"><option value="student">زبان‌آموز</option><option value="teacher">مدرس</option><option value="manager">مدیر</option></select></div>
+        <div style="display:flex;align-items:flex-end"><button class="btn btn--g btn--b" data-a="memAdd" data-inst="${inst.id}">افزودن</button></div>
+      </div>
+      <span class="hint">اگر کاربری با این شماره هنوز ثبت‌نام نکرده، اول باید یک‌بار وارد پنل آموزشگاه شود؛ اینجا فقط کاربرهای موجود را به آموزشگاه وصل می‌کند.</span>
+    </div>
+  </div>`;
+}
+
+/* ── کاربران و نقش‌ها ── */
+var ROLE_FA={manager:"مدیر",teacher:"مدرس",student:"زبان‌آموز"};
+
+function viewUsers(){
+  if(S.userDetail)return viewUserDetail();
+  if(S.userResults===null&&!S.userBusy)doUserLoad(false);
+
+  var f=S.userFilter, st=S.userStats, m=S.userMeta;
+  /* S.institutes خودش آرایه است، نه پوشش. برای فهرست کشویی لازم
+     است و اگر هنوز نیامده، همین‌جا می‌آید — کاربر نباید مجبور شود
+     اول صفحهٔ آموزشگاه‌ها را باز کند تا این پالایه پر شود. */
+  var insts=S.institutes||[];
+  if(S.institutes===null&&API.live&&!S.instLoading){
+    S.instLoading=true;
+    doInstSearch().then(function(){S.instLoading=false;render();});
+  }
+
+  /* پالایه‌ای که چیزی را می‌بندد باید دیده شود؛ وگرنه کاربر فهرست
+     ناقص را کامل می‌پندارد و می‌گوید «فلانی نیست». */
+  var narrowed=(S.userQ||"")!==""||f.status!=="all"||f.role!=="all"||f.instituteId!=="";
+
+  return h`
+  ${st?h`<div class="grid g4" style="margin-block-end:16px">
+    ${suKpi("همهٔ کاربران",st.total,"ثبت‌نام‌شده")}
+    ${suKpi("مدیر",st.managers,"دست‌کم یک آموزشگاه")}
+    ${suKpi("مدرس",st.teachers,"")}
+    ${suKpi("زبان‌آموز",st.students,"")}
+  </div>`:""}
+
+  <div class="card" style="margin-block-end:16px">
+    <div class="card-b">
+      <div class="grid g4" style="align-items:end">
+        <div class="fld"><label for="userQ">نام یا موبایل</label>
+          <input id="userQ" type="text" placeholder="خالی = همه" value="${esc(S.userQ)}"></div>
+        <div class="fld"><label for="ufRole">نقش</label>
+          <select id="ufRole">
+            <option value="all"${f.role==="all"?" selected":""}>همه</option>
+            <option value="manager"${f.role==="manager"?" selected":""}>مدیر</option>
+            <option value="teacher"${f.role==="teacher"?" selected":""}>مدرس</option>
+            <option value="student"${f.role==="student"?" selected":""}>زبان‌آموز</option>
+            <option value="none"${f.role==="none"?" selected":""}>بدون آموزشگاه${st?" ("+fa(st.orphans)+")":""}</option>
+          </select></div>
+        <div class="fld"><label for="ufStatus">وضعیت</label>
+          <select id="ufStatus">
+            <option value="all"${f.status==="all"?" selected":""}>همه</option>
+            <option value="active"${f.status==="active"?" selected":""}>فعال</option>
+            <option value="suspended"${f.status==="suspended"?" selected":""}>مسدود${st?" ("+fa(st.suspended)+")":""}</option>
+          </select></div>
+        <div class="fld"><label for="ufInst">آموزشگاه</label>
+          <select id="ufInst">
+            <option value="">همه</option>
+            ${insts.map(function(i){
+              return '<option value="'+esc(i.id)+'"'+(f.instituteId===i.id?" selected":"")+'>'
+                   + esc(i.name)+'</option>';}).join("")}
+          </select>
+          ${insts.length?"":'<span class="hint">اول صفحهٔ آموزشگاه‌ها را باز کنید</span>'}</div>
+      </div>
+      <div class="row" style="gap:8px;margin-block-start:12px">
+        <button class="btn btn--p btn--sm" data-a="userFilter">اعمال</button>
+        ${narrowed?h`<button class="btn btn--g btn--sm" data-a="userFilterClear">پاک‌کردن پالایه‌ها</button>`:""}
+        <span class="muted" style="font-size:12.5px;margin-inline-start:auto">
+          ${S.userBusy?"در حال گرفتن…":m?fa(m.total)+" کاربر"+(narrowed?" با این پالایه":""):""}</span>
+      </div>
+    </div>
+  </div>
+
+  ${S.userResults===null?'<div class="card"><div class="empty">در حال بارگذاری…</div></div>':
+    !S.userResults.length?h`<div class="card"><div class="empty">
+        <b>کسی با این پالایه نیست</b>
+        ${narrowed?'<p>پالایه‌ها را باز کنید تا همهٔ کاربران دیده شوند.</p>':""}</div></div>`:
+    h`<div class="card"><div class="tbl-wrap"><table>
+      <thead><tr><th>نام</th><th>موبایل</th><th>نقش</th><th>آموزشگاه</th>
+                 <th>آخرین ورود</th><th>وضعیت</th><th></th></tr></thead>
+      <tbody>${S.userResults.map(function(u){
+        return h`<tr class="click" data-openuser="${u.id}">
+          <td><b>${esc(u.name)}</b>
+            <br><span class="muted" style="font-size:11.5px">از ${jDateTime(u.createdAt)}</span></td>
+          <td class="num" dir="ltr" style="text-align:end">${fa(u.phone)}</td>
+          <td>${(u.roles||[]).length
+                ? u.roles.map(function(r){
+                    return '<span class="pill p-mute">'+esc(ROLE_FA[r]||r)+'</span>';}).join(" ")
+                : '<span class="pill p-bad">بدون آموزشگاه</span>'}</td>
+          <td>${u.institutes?esc(u.institutes):'<span class="muted">—</span>'}</td>
+          <td class="num">${u.lastLoginAt?jDateTime(u.lastLoginAt):'<span class="muted">هرگز</span>'}</td>
+          <td>${u.status==="active"?'<span class="pill p-ok">فعال</span>':'<span class="pill p-bad">مسدود</span>'}</td>
+          <td><button class="btn btn--sm btn--g" data-openuser="${u.id}">مشاهده</button></td>
+        </tr>`;}).join("")}
+      </tbody></table></div>
+      ${m&&m.pages>1?h`<div class="row" style="gap:8px;padding:12px 16px;align-items:center">
+        <button class="btn btn--g btn--sm" data-a="userPage" data-p="${m.page-1}"
+                ${m.page<=1?"disabled":""}>قبلی</button>
+        <span class="muted" style="font-size:12.5px">صفحهٔ ${fa(m.page)} از ${fa(m.pages)}</span>
+        <button class="btn btn--g btn--sm" data-a="userPage" data-p="${m.page+1}"
+                ${m.page>=m.pages?"disabled":""}>بعدی</button>
+      </div>`:""}
+    </div>`}`;
+}
+
+/* کارت آمار کوچک — همان شکلِ بقیهٔ پنل، بدون وابستگی به kpi() پنل مدیر */
+function suKpi(label,n,hint){
+  return h`<div class="card" style="padding:14px 16px">
+    <div class="muted" style="font-size:12.5px">${esc(label)}</div>
+    <div class="num" style="font-size:24px;font-weight:700;line-height:1.4">${fa(n)}</div>
+    ${hint?h`<div class="muted" style="font-size:11.5px">${esc(hint)}</div>`:""}
+  </div>`;
+}
+
+
+/* ── اعطا و سلب موردی روی یک کاربر ──
+ *
+ * بستهٔ نقش کف دسترسی است؛ این پنل استثناها را می‌سازد. دو حالت دارد:
+ * allow برای دادن چیزی که نقشش ندارد، deny برای گرفتن چیزی که دارد.
+ * سلب همیشه برنده است — حتی بر اعطای صریح — و این قاعده در موتور
+ * اعمال می‌شود، نه اینجا.
+ */
+function accessPanel(d){
+  if(!d.overrides&&!d.memberships)return "";
+  var cat=S.access;
+  var ovr=d.overrides||[];
+  var mem=(d.memberships||[]).filter(function(m){return m.status==="active";});
+  if(!mem.length)return "";
+
+  return h`
+  <div class="card" style="margin-block-end:16px">
+    <div class="card-h"><h3>دسترسی‌های موردی</h3>
+      <span class="muted" style="font-size:12.5px">فراتر یا کمتر از بستهٔ نقش</span></div>
+    <div class="card-b">
+      ${ovr.length? h`<div class="tbl-wrap"><table>
+        <thead><tr><th>آموزشگاه</th><th>مجوز</th><th>اثر</th><th>تا</th><th></th></tr></thead>
+        <tbody>${ovr.map(function(o){
+          return h`<tr>
+            <td>${esc(o.institute)}</td>
+            <td>${esc(o.label)}<br><span class="muted" dir="ltr" style="font-size:11.5px">${esc(o.perm)}</span></td>
+            <td>${o.effect==="allow"
+                  ? '<span class="pill p-ok">اعطا'+(o.scope?" · "+(SCOPE_FA[o.scope]||o.scope):"")+'</span>'
+                  : '<span class="pill p-bad">سلب</span>'}</td>
+            <td class="num">${o.expiresAt?jDateTime(o.expiresAt):"بی‌پایان"}</td>
+            <td><button class="btn btn--g btn--sm" data-a="permClear" data-uid="${d.user.id}"
+                        data-iid="${o.instituteId}" data-perm="${esc(o.perm)}">برداشتن</button></td>
+          </tr>`;}).join("")}
+        </tbody></table></div>`
+        : '<div class="empty" style="padding:14px">استثنایی ثبت نشده — این کاربر دقیقاً همان چیزی را دارد که نقشش می‌دهد.</div>'}
+
+      <div style="margin-block-start:16px;padding-block-start:16px;border-block-start:1px solid var(--line)">
+        <div class="grid g4" style="align-items:end">
+          <div class="fld"><label>آموزشگاه</label>
+            <select id="apInst">${mem.map(function(m){
+              return '<option value="'+m.instituteId+'">'+esc(m.institute)+' · '+esc(m.role)+'</option>';}).join("")}</select></div>
+          <div class="fld"><label>مجوز</label>
+            <select id="apPerm">${cat
+              ? cat.permissions.filter(function(x){return !x.platform;}).map(function(x){
+                  return '<option value="'+x.key+'">'+esc(x.label)+'</option>';}).join("")
+              : '<option value="">اول صفحهٔ نقش‌ها را باز کنید</option>'}</select></div>
+          <div class="fld"><label>محدوده</label>
+            <select id="apScope">${(cat&&cat.scopes||["own","institute"]).map(function(x){
+              return '<option value="'+x+'">'+(SCOPE_FA[x]||x)+'</option>';}).join("")}</select></div>
+          <div class="fld"><label>روز (۰ = بی‌پایان)</label>
+            <input id="apDays" type="text" inputmode="numeric" value="0"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-block-start:10px">
+          <button class="btn btn--p btn--sm" data-a="permAllow" data-uid="${d.user.id}">اعطا</button>
+          <button class="btn btn--d btn--sm" data-a="permDeny"  data-uid="${d.user.id}">سلب</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function viewUserDetail(){
+  var d=S.userDetail;
+  if(!d)return '<div class="card"><div class="empty">در حال بارگذاری…</div></div>';
+  var u=d.user;
+  return h`
+  <button class="back" data-a="userBack">← بازگشت به فهرست کاربران</button>
+  ${accessPanel(d)}
+  <div class="card"><div class="card-h"><h3>${esc(u.name)}</h3>
+      ${u.status==="active"?'<span class="pill p-ok">فعال</span>':'<span class="pill p-bad">مسدود</span>'}</div>
+    <div class="card-b">
+      <div class="grid g3">
+        <div><div class="muted" style="font-size:12.5px">موبایل</div><div class="num" dir="ltr">${fa(u.phone)}</div></div>
+        <div><div class="muted" style="font-size:12.5px">عضو شده</div><div class="num">${jDateTime(u.createdAt)}</div></div>
+        <div><div class="muted" style="font-size:12.5px">آخرین ورود</div><div class="num">${jDateTime(u.lastLoginAt)}</div></div>
+      </div>
+      <div style="margin-block-start:16px">
+        ${u.status==="active"
+          ? '<button class="btn btn--d" data-a="userSuspend" data-id="'+u.id+'">مسدودسازی کامل کاربر</button>'
+          : '<button class="btn btn--g" data-a="userReactivate" data-id="'+u.id+'">رفع مسدودی</button>'}
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3>عضویت‌ها</h3></div>
+    ${!d.memberships.length?'<div class="card-b"><div class="empty"><b>هنوز عضو هیچ آموزشگاهی نیست</b></div></div>':
+    h`<div class="tbl-wrap"><table>
+      <thead><tr><th>آموزشگاه</th><th>نقش</th><th>وضعیت</th><th></th></tr></thead>
+      <tbody>${d.memberships.map(function(m){
+        return h`<tr>
+          <td><b>${esc(m.instituteName)}</b></td>
+          <td><select data-setrole="${m.membershipId}" style="padding:5px;border-radius:7px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink)">
+            ${["manager","teacher","student"].map(function(r){
+              return '<option value="'+r+'"'+(m.role===r?" selected":"")+'>'+ROLE_FA[r]+'</option>';}).join("")}
+          </select></td>
+          <td>${m.status==="active"?'<span class="pill p-ok">فعال</span>':'<span class="pill p-mute">غیرفعال</span>'}</td>
+          <td style="white-space:nowrap">
+            ${m.status==="active"
+              ? '<button class="btn btn--sm btn--g" data-a="memSuspend" data-id="'+m.membershipId+'">تعلیق</button>'
+              : '<button class="btn btn--sm btn--g" data-a="memReactivate" data-id="'+m.membershipId+'">فعال‌سازی</button>'}
+            <button class="btn btn--sm btn--p" data-a="impStart" data-user="${u.id}" data-inst="${m.instituteId}" data-name="${esc(u.name)}">ورود به‌جای کاربر</button>
+            <button class="btn btn--sm btn--d" data-a="memRemove" data-id="${m.membershipId}">حذف عضویت</button>
+          </td>
+        </tr>`;}).join("")}
+      </tbody></table></div>`}
+  </div>`;
+}
+
+/* ── گفتگوی دلیل (impersonate) ── */
+function viewReasonModal(){
+  var m=S.reasonModal;
+  if(!m)return "";
+  return h`<div class="modal-bg" data-a="modalClose"><div class="modal" onclick="event.stopPropagation()">
+    <div class="card-h"><h3>ورود به‌جای ${esc(m.name)}</h3></div>
+    <div class="card-b">
+      <div class="note note--w">این کار ثبت می‌شود: چه کسی، چه زمانی، با چه دلیلی. فقط برای پشتیبانی واقعی استفاده کنید.</div>
+      <div class="fld"><label for="impReason">دلیل <span class="rq">*</span></label>
+        <textarea id="impReason" placeholder="مثلاً: بررسی گزارش کاربر دربارهٔ حضور و غیاب نشده"></textarea></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn--g" data-a="modalClose">انصراف</button>
+        <button class="btn btn--p" data-a="impConfirm" ${S.busy?"disabled":""}>${S.busy?"صبر کنید…":"تأیید و ساخت لینک"}</button>
+      </div>
+    </div>
+  </div></div>`;
+}
+
+/* ── فرم‌های تنظیمات سایت (پورت از پنل قدیمی) ── */
+function setField(key,label,hint,type){
+  var v=S.settings?S.settings[key]:"";
+  if(type==="textarea"){
+    return h`<div class="fld"><label for="f_${key}">${label}</label>
+      <textarea id="f_${key}" data-k="${key}" dir="auto">${esc(v)}</textarea>
+      ${hint?'<span class="hint">'+hint+'</span>':""}</div>`;
+  }
+  if(type==="toggle"){
+    return h`<div class="fld"><label for="f_${key}">${label}</label>
+      <select id="f_${key}" data-k="${key}">
+        <option value="1"${v==="1"?" selected":""}>روشن</option>
+        <option value="0"${v!=="1"?" selected":""}>خاموش</option></select>
+      ${hint?'<span class="hint">'+hint+'</span>':""}</div>`;
+  }
+  return h`<div class="fld"><label for="f_${key}">${label}</label>
+    <input id="f_${key}" data-k="${key}" type="${type||"text"}"
+           ${type==="email"||type==="tel"?'dir="ltr" style="text-align:end"':""} value="${esc(v)}">
+    ${hint?'<span class="hint">'+hint+'</span>':""}</div>`;
+}
+
+function priceField(key,label,hint){
+  var rial=+(S.settings&&S.settings[key]||0);
+  return h`<div class="fld"><label for="f_${key}">${label}</label>
+    <input id="f_${key}" data-k="${key}" data-money="1" type="text" inputmode="numeric"
+           value="${rial?faG(Math.round(rial/10)):""}">
+    <span class="hint">${hint} — به تومان وارد کنید</span></div>`;
+}
+
+function saveBar(){
+  return h`<div class="card-b" style="border-block-start:1px solid var(--line);display:flex;gap:10px;align-items:center">
+    <button class="btn btn--p" data-a="save" ${S.busy?"disabled":""}>${S.busy?"در حال ذخیره…":"ذخیره"}</button>
+    <span class="muted" style="font-size:13px">تغییرات بلافاصله روی سایت اعمال می‌شود.</span></div>`;
+}
+
+function viewPricing(){
+  if(!S.settings)return '<div class="card"><div class="empty">در حال بارگذاری…</div></div>';
+  var d=+(S.settings.annual_discount||0);
+  return h`
+  <div class="note note--i">قیمت‌ها را به <b>تومان</b> وارد کنید؛ در پایگاه داده به ریال ذخیره می‌شود.</div>
+  <div class="card">
+    <div class="card-h"><h3>تعرفهٔ ماهانه</h3></div>
+    <div class="card-b">
+      <div class="grid g3">
+        ${priceField("price_basic","پلن پایه","برای آموزشگاه‌های کوچک")}
+        ${priceField("price_growth","پلن رشد","پرفروش‌ترین")}
+        ${priceField("price_pro","پلن حرفه‌ای","چندشعبه")}
+      </div>
+      <div class="grid g2">
+        ${setField("annual_discount","تخفیف پرداخت سالانه (درصد)","قیمت سالانه خودکار حساب می‌شود؛ الان "+fa(d)+"٪")}
+        ${setField("trial_days","روزهای رایگان آزمایشی","در سایت نوشته می‌شود")}
+      </div>
+    </div>
+    ${saveBar()}
+  </div>`;
+}
+
+function viewContact(){
+  if(!S.settings)return '<div class="card"><div class="empty">در حال بارگذاری…</div></div>';
+  return h`
+  <div class="card">
+    <div class="card-h"><h3>ایمیل</h3></div>
+    <div class="card-b">
+      ${setField("demo_email","درخواست دموی رایگان به این آدرس برود","هر بار کسی فرم سایت را پر کند، یک ایمیل به این آدرس می‌رود.","email")}
+      ${setField("contact_email","ایمیل نمایشی در سایت","همین آدرس فرستندهٔ ایمیل‌های خروجی هم هست.","email")}
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn--g" data-a="testmail">ارسال ایمیل آزمایشی</button>
+      </div>
+    </div>
+    ${saveBar()}
+  </div>
+  <div class="card">
+    <div class="card-h"><h3>تماس</h3></div>
+    <div class="card-b">
+      ${setField("contact_phone","تلفن","در فوتر و دکمهٔ تماس سایت","tel")}
+      ${setField("contact_address","نشانی","","textarea")}
+      ${setField("support_hours","ساعت پاسخگویی")}
+    </div>
+    ${saveBar()}
+  </div>`;
+}
+
+function viewContent(){
+  if(!S.settings)return '<div class="card"><div class="empty">در حال بارگذاری…</div></div>';
+  return h`
+  <div class="card">
+    <div class="card-h"><h3>صفحهٔ اول</h3></div>
+    <div class="card-b">
+      ${setField("hero_title","تیتر اصلی")}
+      ${setField("hero_sub","توضیح زیر تیتر","","textarea")}
+      ${setField("cta_text","متن دکمهٔ اصلی")}
+    </div>
+    ${saveBar()}
+  </div>
+  <div class="card">
+    <div class="card-h"><h3>نوار اعلان بالای سایت</h3></div>
+    <div class="card-b">
+      ${setField("banner_on","نمایش نوار","","toggle")}
+      ${setField("banner_text","متن نوار","مثلاً: تا پایان مهر، دو ماه رایگان برای ثبت‌نام‌های جدید")}
+    </div>
+    ${saveBar()}
+  </div>`;
+}
+
+function viewTrust(){
+  if(!S.settings)return '<div class="card"><div class="empty">در حال بارگذاری…</div></div>';
+  return h`
+  <div class="card">
+    <div class="card-h"><h3>نماد اعتماد و ساماندهی</h3></div>
+    <div class="card-b">
+      <div class="note note--w">کد این نمادها را فقط از پنل رسمی خودشان بگیرید.</div>
+      ${setField("enamad_html","کد نماد اعتماد الکترونیکی","","textarea")}
+      ${setField("samandehi_html","کد ساماندهی","","textarea")}
+    </div>
+    ${saveBar()}
+  </div>
+  <div class="card">
+    <div class="card-h"><h3>وضعیت سامانه</h3></div>
+    <div class="card-b">
+      ${setField("signup_open","ثبت‌نام آموزشگاه جدید باز باشد","خاموش کنید تا فعلاً کسی نتواند آموزشگاه تازه بسازد.","toggle")}
+      ${setField("maintenance","حالت تعمیرات","روشن کنید تا در سایت پیام «به‌زودی برمی‌گردیم» دیده شود.","toggle")}
+    </div>
+    ${saveBar()}
+  </div>`;
+}
+
+/* ── سرنخ‌ها ── */
+var LEAD_FA={new:"تازه",contacted:"تماس گرفته شد",won:"مشتری شد",lost:"از دست رفت"};
+var LEAD_CLS={new:"warn",contacted:"info",won:"ok",lost:"mute"};
+
+/* ══════════ اعلان پلتفرم ══════════
+ *
+ * سوپرادمین به بخشی از کاربران همهٔ آموزشگاه‌ها می‌فرستد. بخش‌بندی
+ * مهم است، نه تزئینی: پیامی که به همه می‌رود برای بیشترشان بی‌ربط
+ * است و دفعهٔ بعد کسی نمی‌خواندش. «آموزشگاه‌هایی که دورهٔ آزمایشی‌شان
+ * رو به پایان است» مخاطب واقعی یک پیام است؛ «همه» معمولاً نیست.
+ */
+
+var NKIND={info:{i:"◆",c:"nk-info",t:"خبر"},
+           success:{i:"✓",c:"nk-ok",t:"خبر خوب"},
+           warn:{i:"!",c:"nk-warn",t:"هشدار"},
+           urgent:{i:"!!",c:"nk-bad",t:"فوری"}};
+
+function loadNotify(force){
+  if(S.notifBusy)return;
+  if(S.notifData&&!force)return;
+  S.notifBusy=true;
+  Promise.all([
+    call({action:"notify.audiences"}),
+    call({action:"notify.sent"})
+  ]).then(function(r){
+    S.notifBusy=false;
+    if(r[0]&&r[0].ok)S.notifData=r[0];
+    if(r[1]&&r[1].ok)S.notifSent=r[1].sent||[];
+    if(S.view==="notify")render();
+  });
+}
+
+function nfRead(){
+  var t=el("nfTitle"), b=el("nfBody"), i=el("nfInst");
+  if(t)S.notifDraft.title=t.value;
+  if(b)S.notifDraft.body=b.value;
+  /* کشویی آموزشگاه و کارت‌های بخش یک خانه‌اند: انتخاب هرکدام آن یکی
+     را باطل می‌کند، وگرنه کاربر دو چیز انتخاب‌شده می‌بیند و نمی‌داند
+     کدام می‌رود */
+  if(i&&i.value&&i.value!==S.notifDraft.segment&&i.value.indexOf("inst:")===0){
+    S.notifDraft.segment=i.value;
+  }
+}
+
+function viewNotify(){
+  loadNotify(false);
+  var d=S.notifData;
+  if(!d)return '<div class="card"><div class="empty">در حال بارگذاری…</div></div>';
+
+  var n=S.notifDraft;
+  var picked=(d.segments||[]).concat((d.institutes||[]).map(function(i){
+    return {key:"inst:"+i.id,label:"آموزشگاه "+i.name,count:i.count};
+  })).filter(function(x){return x.key===n.segment;})[0];
+
+  return h`
+  <div class="card" style="margin-block-end:16px">
+    <div class="card-h"><h3>اعلان تازه</h3></div>
+    <div style="padding:16px">
+
+      <div class="fld">
+        <label>بخش مخاطب <span class="rq">*</span></label>
+        <div class="seg-picks">${(d.segments||[]).map(function(s){
+          return h`<button class="aud ${n.segment===s.key?"on":""}"
+                           data-seg="${esc(s.key)}" ${s.count?"":"disabled"}>
+            <b>${esc(s.label)}</b>
+            <small class="num">${s.count?fa(s.count)+" نفر":"کسی نیست"}</small></button>`;
+        }).join("")}</div>
+      </div>
+
+      <div class="fld">
+        <label for="nfInst">یا یک آموزشگاه مشخص</label>
+        <select id="nfInst">
+          <option value="">— انتخاب کنید —</option>
+          ${(d.institutes||[]).map(function(i){
+            return '<option value="inst:'+esc(i.id)+'"'+(n.segment==="inst:"+i.id?" selected":"")+'>'
+                 + esc(i.name)+' ('+fa(i.count)+' نفر)'+(i.plan==="trial"?" — آزمایشی":"")
+                 + (i.status==="suspended"?" — معلق":"")+'</option>';}).join("")}
+        </select>
+      </div>
+
+      <div class="fld">
+        <label for="nfTitle">عنوان <span class="rq">*</span></label>
+        <input id="nfTitle" type="text" maxlength="140" value="${esc(n.title)}"
+               placeholder="مثلاً: به‌روزرسانی سامانه در شب جمعه">
+      </div>
+      <div class="fld">
+        <label for="nfBody">متن <span class="rq">*</span></label>
+        <textarea id="nfBody" maxlength="2000" rows="4"
+                  placeholder="کوتاه و روشن. گیرنده روی گوشی سه خط اول را می‌بیند.">${esc(n.body)}</textarea>
+      </div>
+
+      <div class="fld">
+        <label>لحن</label>
+        <div class="kind-picks">${[["info","عادی"],["success","خوب"],["warn","هشدار"],["urgent","فوری"]]
+          .map(function(k){
+            return '<button class="kind '+(n.kind===k[0]?"on ":"")+"nk-"+k[0]+'" data-kind="'+k[0]+'">'
+                 + k[1]+'</button>';}).join("")}</div>
+      </div>
+
+      ${n.err?'<div class="au-err" role="alert">'+esc(n.err)+'</div>':""}
+
+      <div class="row" style="gap:10px;align-items:center">
+        <button class="btn btn--p" data-a="nf-send" ${n.busy?"disabled":""}>
+          ${n.busy?"در حال فرستادن…":"فرستادن"}</button>
+        <span class="muted">${picked
+          ? "به "+fa(picked.count)+" نفر می‌رسد و قابل پس‌گرفتن نیست."
+          : "اول بخش مخاطب را انتخاب کنید."}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3>فرستاده‌های پلتفرم</h3>
+      <button class="btn btn--g btn--sm" data-a="nf-refresh">تازه‌سازی</button></div>
+    ${(S.notifSent||[]).length===0
+      ? '<div class="empty"><b>هنوز اعلانی نفرستاده‌اید</b></div>'
+      : h`<div class="tbl-wrap"><table>
+          <thead><tr><th>عنوان</th><th>مخاطب</th><th>گیرنده</th><th>خوانده</th><th>زمان</th></tr></thead>
+          <tbody>${S.notifSent.map(function(x){
+            var k=NKIND[x.kind]||NKIND.info;
+            var pct=x.recipients?Math.round(x.readCount*100/x.recipients):0;
+            return h`<tr>
+              <td><span class="ntf-i ${k.c}" aria-label="${k.t}">${k.i}</span>
+                  <b>${esc(x.title)}</b>
+                  <br><span class="muted">${esc(x.body.slice(0,90))}${x.body.length>90?"…":""}</span></td>
+              <td>${esc(x.audience)}</td>
+              <td class="num">${fa(x.recipients)}</td>
+              <td class="num">${fa(x.readCount)}<span class="muted"> (${fa(pct)}٪)</span></td>
+              <td class="num">${jDateTime(x.createdAt)}</td></tr>`;}).join("")}
+          </tbody></table></div>`}
+  </div>`;
+}
+
+/* ══════════ وبلاگ ══════════
+ *
+ * ویرایشگر روی contenteditable ساخته شده، نه روی یک کتابخانهٔ آماده.
+ * دلیلش همان دلیل همیشگی این پروژه است: هاست اشتراکی، بی npm و بی
+ * مرحلهٔ build. execCommand منسوخ اعلام شده ولی در همهٔ مرورگرهای
+ * امروز کار می‌کند و جایگزینِ بی‌وابستگی ندارد.
+ *
+ * هرچه اینجا تولید شود، سمت سرور پالوده می‌شود — پس ویرایشگر لازم
+ * نیست خودش امن باشد، فقط باید راحت باشد.
+ */
+
+function loadBlog(force){
+  if(S.blogBusy)return;
+  if(S.blog&&!force)return;
+  S.blogBusy=true;
+  call({action:"blog.list"}).then(function(r){
+    S.blogBusy=false;
+    if(r.ok)S.blog=r;
+    if(S.view==="blog")render();
+  });
+}
+
+function viewBlog(){
+  loadBlog(false);
+  var d=S.blog;
+  if(!d)return '<div class="card"><div class="empty">در حال بارگذاری…</div></div>';
+  if(S.blogEdit)return viewBlogEdit();
+
+  var posts=d.posts||[];
+  var live=posts.filter(function(p){return p.status==="published";}).length;
+
+  return h`
+  ${d.uploads&&d.uploads.ok===false?h`<div class="note note--w">
+    <b>پوشهٔ تصویرها نوشتنی نیست.</b> تا وقتی درست نشود، آپلود تصویر کار نمی‌کند.
+    مسیر را با <code>blog_upload_dir</code> در config.php بدهید.</div>`:""}
+
+  <div class="card">
+    <div class="card-h"><h3>نوشته‌ها</h3>
+      <div class="row" style="gap:10px;align-items:center">
+        <span class="muted num">${fa(live)} منتشرشده از ${fa(posts.length)}</span>
+        <button class="btn btn--p btn--sm" data-a="blogNew">نوشتهٔ تازه</button>
+      </div></div>
+    ${posts.length===0?'<div class="empty"><b>هنوز نوشته‌ای نیست</b>'
+      +'<p>اولین نوشته را بنویسید تا وبلاگ در گوگل دیده شود.</p></div>'
+    :h`<div class="tbl-wrap"><table>
+      <thead><tr><th>عنوان</th><th>دسته</th><th>نشانی</th><th>بازدید</th>
+                 <th>تاریخ</th><th>وضعیت</th><th></th></tr></thead>
+      <tbody>${posts.map(function(p){
+        return h`<tr>
+          <td><b>${esc(p.title)}</b>
+            ${p.excerpt?'<br><span class="muted">'+esc(p.excerpt.slice(0,70))+'…</span>':""}</td>
+          <td>${p.category?esc(p.category):'<span class="muted">—</span>'}</td>
+          <td><code style="font-size:11.5px">${esc(p.slug)}</code></td>
+          <td class="num">${fa(p.views)}</td>
+          <td class="num">${p.publishedAt?jDateTime(p.publishedAt):'<span class="muted">—</span>'}</td>
+          <td>${p.status==="published"?'<span class="pill p-ok">منتشرشده</span>'
+                                      :'<span class="pill p-mute">پیش‌نویس</span>'}</td>
+          <td style="white-space:nowrap">
+            <button class="btn btn--g btn--sm" data-a="blogEdit" data-id="${esc(p.id)}">ویرایش</button>
+            <button class="btn btn--sm ${p.status==="published"?"btn--g":"btn--p"}"
+                    data-a="blogPub" data-id="${esc(p.id)}"
+                    data-on="${p.status==="published"?"0":"1"}">
+              ${p.status==="published"?"از انتشار درآور":"انتشار"}</button>
+            ${p.status==="published"?h`<a class="btn btn--g btn--sm"
+               href="${esc(blogPublicUrl(p.slug))}" target="_blank" rel="noopener">دیدن</a>`:""}
+          </td></tr>`;}).join("")}
+      </tbody></table></div>`}
+  </div>`;
+}
+
+/* نشانی عمومی نوشته — همان قاعدهٔ سمت سایت */
+function blogPublicUrl(slug){
+  return "https://talkora.ir/blog/"+encodeURIComponent(slug);
+}
+
+function viewBlogEdit(){
+  var p=S.blogEdit, isNew=!p.id;
+  var cats=(S.blog&&S.blog.categories)||[];
+  return h`
+  <button class="back" data-a="blogBack">← بازگشت به فهرست نوشته‌ها</button>
+
+  <div class="card">
+    <div class="card-h"><h3>${isNew?"نوشتهٔ تازه":"ویرایش نوشته"}</h3>
+      ${p.slug?h`<code style="font-size:12px">${esc(p.slug)}</code>`:""}</div>
+    <div class="card-b">
+      <div class="fld"><label for="bTitle">عنوان <span class="rq">*</span></label>
+        <input id="bTitle" type="text" maxlength="200" value="${esc(p.title||"")}"
+               placeholder="مثلاً: چطور کلاس مکالمه را زنده نگه داریم"></div>
+
+      <div class="grid g2">
+        <div class="fld"><label for="bSlug">نشانی</label>
+          <input id="bSlug" type="text" maxlength="180" value="${esc(p.slug||"")}"
+                 placeholder="خالی بگذارید تا از عنوان ساخته شود">
+          <span class="hint">فارسی بماند — کلیدواژه در نشانی، خودش عامل رتبه است.
+            بعد از انتشار عوضش نکنید.</span></div>
+        <div class="fld"><label for="bCat">دسته</label>
+          <select id="bCat"><option value="">— بدون دسته —</option>
+            ${cats.map(function(c){
+              return '<option value="'+esc(c.id)+'"'+(p.categoryId===c.id?" selected":"")+'>'
+                   + esc(c.name)+'</option>';}).join("")}
+          </select></div>
+      </div>
+
+      <div class="fld"><label for="bExcerpt">چکیده</label>
+        <textarea id="bExcerpt" rows="2" maxlength="400"
+          placeholder="یکی دو جمله. همین در فهرست و در اشتراک‌گذاری دیده می‌شود.">${esc(p.excerpt||"")}</textarea></div>
+
+      <div class="fld">
+        <label>تصویر شاخص</label>
+        <div class="cover-pick">
+          ${p.cover?h`<img src="${esc(blogUploadUrl(p.cover))}" alt="" class="cover-prev">`
+                   :'<div class="cover-prev empty-prev">بدون تصویر</div>'}
+          <div class="row" style="gap:8px;flex-direction:column;align-items:stretch;flex:1">
+            <input type="file" id="bCoverFile" accept="image/png,image/jpeg,image/webp,image/gif">
+            <input id="bCoverAlt" type="text" maxlength="200" value="${esc(p.coverAlt||"")}"
+                   placeholder="متن جایگزین تصویر — برای صفحه‌خوان و جست‌وجوی تصویر">
+            ${p.cover?h`<button class="btn btn--g btn--sm" data-a="blogCoverClear">برداشتن تصویر</button>`:""}
+          </div>
+        </div>
+      </div>
+
+      <div class="fld">
+        <label>متن نوشته <span class="rq">*</span></label>
+        <div class="ed-bar" role="toolbar" aria-label="ابزار نوشتن">
+          <button type="button" data-ed="formatBlock" data-v="h2">تیتر</button>
+          <button type="button" data-ed="formatBlock" data-v="h3">زیرتیتر</button>
+          <button type="button" data-ed="formatBlock" data-v="p">متن</button>
+          <span class="sep"></span>
+          <button type="button" data-ed="bold"><b>پررنگ</b></button>
+          <button type="button" data-ed="italic"><i>مورب</i></button>
+          <span class="sep"></span>
+          <button type="button" data-ed="insertUnorderedList">فهرست</button>
+          <button type="button" data-ed="insertOrderedList">شماره‌دار</button>
+          <button type="button" data-ed="formatBlock" data-v="blockquote">نقل‌قول</button>
+          <span class="sep"></span>
+          <button type="button" data-a="blogLink">پیوند</button>
+          <button type="button" data-a="blogImage">تصویر</button>
+          <span class="sep"></span>
+          <button type="button" data-ed="removeFormat">پاک‌کردن قالب</button>
+        </div>
+        <div id="bBody" class="ed" contenteditable="true" dir="rtl"></div>
+        <input type="file" id="bInlineFile" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+        <span class="hint">هرچه اینجا بنویسید سمت سرور پالوده می‌شود؛
+          تگ و صفت خطرناک ذخیره نمی‌شود.</span>
+      </div>
+
+      <details class="seo">
+        <summary>تنظیمات سئو</summary>
+        <div class="grid g2" style="margin-block-start:12px">
+          <div class="fld"><label for="bMetaT">عنوان متا</label>
+            <input id="bMetaT" type="text" maxlength="200" value="${esc(p.metaTitle||"")}"
+                   placeholder="خالی = همان عنوان نوشته">
+            <span class="hint">آنچه در نتیجهٔ گوگل دیده می‌شود. زیر ۶۰ نویسه بهتر است.</span></div>
+          <div class="fld"><label for="bAuthor">نویسنده</label>
+            <input id="bAuthor" type="text" maxlength="120" value="${esc(p.author||"تیم تاکورا")}"></div>
+        </div>
+        <div class="fld"><label for="bMetaD">توضیح متا</label>
+          <textarea id="bMetaD" rows="2" maxlength="300"
+            placeholder="خالی = چکیده">${esc(p.metaDesc||"")}</textarea>
+          <span class="hint">زیر ۱۶۰ نویسه، وگرنه گوگل کوتاهش می‌کند.</span></div>
+      </details>
+
+      ${p.err?'<div class="au-err" role="alert">'+esc(p.err)+'</div>':""}
+
+      <div class="row" style="gap:8px;margin-block-start:6px">
+        <button class="btn btn--p" data-a="blogSave" ${p.busy?"disabled":""}>
+          ${p.busy?"در حال ذخیره…":"ذخیره"}</button>
+        ${p.id?h`<button class="btn btn--g" data-a="blogPub" data-id="${esc(p.id)}"
+          data-on="${p.status==="published"?"0":"1"}">
+          ${p.status==="published"?"از انتشار درآور":"ذخیره و انتشار"}</button>`:""}
+        ${p.id?h`<button class="btn btn--d btn--sm" style="margin-inline-start:auto"
+          data-a="blogDelete" data-id="${esc(p.id)}">حذف</button>`:""}
+      </div>
+    </div>
+  </div>`;
+}
+
+function blogUploadUrl(file){
+  var base=(S.blog&&S.blog.uploads&&S.blog.uploads.url)||"https://talkora.ir/blog/uploads";
+  return base+"/"+encodeURIComponent(file);
+}
+
+/*
+ * بدنه بعد از هر render دوباره پر می‌شود.
+ *
+ * contenteditable را نمی‌شود مثل input با value پر کرد؛ innerHTML
+ * لازم است و باید *بعد* از نشستن عنصر در DOM انجام شود. اگر داخل
+ * قالب می‌گذاشتیمش، هر بار که کاربر چیزی تایپ می‌کرد و render
+ * می‌خورد، مکان‌نما به اول متن می‌پرید.
+ */
+function blogFillBody(){
+  var n=el("bBody");
+  if(n&&S.blogEdit)n.innerHTML=S.blogEdit.body||"";
+}
+
+/** نوشته‌های فرم را پیش از هر render برمی‌دارد */
+function blogRead(){
+  if(!S.blogEdit)return;
+  var p=S.blogEdit;
+  function v(id){var n=el(id); return n?n.value:"";}
+  p.title=v("bTitle"); p.slug=v("bSlug"); p.excerpt=v("bExcerpt");
+  p.categoryId=v("bCat"); p.coverAlt=v("bCoverAlt");
+  p.metaTitle=v("bMetaT"); p.metaDesc=v("bMetaD"); p.author=v("bAuthor");
+  var bd=el("bBody"); if(bd)p.body=bd.innerHTML;
+}
+
+/**
+ * آپلود تصویر.
+ *
+ * فایل با FileReader به data-URI تبدیل می‌شود و همان رشته می‌رود —
+ * یک مسیر به‌جای دو، و بی‌نیاز از فرم چندبخشی که با بدنهٔ JSON بقیهٔ
+ * API نمی‌خواند. سرور خودش از بایت‌ها بررسی می‌کند که واقعاً تصویر
+ * است؛ پسوند و MIME هر دو از سمت مرورگر می‌آیند و هر دو دروغ
+ * می‌گویند.
+ */
+function blogUpload(file, then){
+  if(!file)return;
+  if(file.size>3*1024*1024){toast("حجم تصویر بیشتر از ۳ مگابایت است");return;}
+  var fr=new FileReader();
+  fr.onload=function(){
+    toast("در حال آپلود…");
+    call({action:"blog.upload",name:file.name,data:String(fr.result)}).then(function(r){
+      if(!r.ok){toast(r.message||"آپلود نشد");return;}
+      then(r);
+    });
+  };
+  fr.onerror=function(){toast("فایل خوانده نشد");};
+  fr.readAsDataURL(file);
+}
+
+function viewLeads(){
+  var d=S.leads;
+  if(!d)return '<div class="card"><div class="empty">در حال بارگذاری…</div></div>';
+  if(!d.leads.length){
+    return h`<div class="card"><div class="empty"><b>هنوز درخواستی نیامده</b></div></div>`;
+  }
+  return h`
+  <div class="grid g4" style="margin-block-end:16px">
+    ${["new","contacted","won","lost"].map(function(k){return kpi(LEAD_FA[k],fa(d.counts[k]||0));}).join("")}
+  </div>
+  <div class="card"><div class="tbl-wrap"><table>
+    <thead><tr><th>نام</th><th>تماس</th><th>آموزشگاه</th><th>زمان</th><th>وضعیت</th><th></th></tr></thead>
+    <tbody>${d.leads.map(function(l){
+      return h`<tr>
+        <td><b>${esc(l.name)}</b>${l.note?'<br><span class="muted">'+esc(l.note.slice(0,90))+'</span>':""}</td>
+        <td class="num" dir="ltr" style="text-align:end">${fa(l.phone)}
+            ${l.email?'<br><span dir="ltr">'+esc(l.email)+'</span>':""}
+            ${l.mailed?"":'<br><span class="pill p-bad">ایمیل نرفت</span>'}</td>
+        <td>${esc(l.institute||"—")}${l.students?'<br><span class="muted">'+esc(l.students)+'</span>':""}</td>
+        <td class="num">${jDateTime(l.at)}</td>
+        <td><span class="pill p-${LEAD_CLS[l.status]||"mute"}">${LEAD_FA[l.status]||l.status}</span></td>
+        <td>
+          <select data-lead="${l.id}" style="padding:5px;border-radius:7px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink)">
+          ${["new","contacted","won","lost"].map(function(k){
+            return '<option value="'+k+'"'+(l.status===k?" selected":"")+'>'+LEAD_FA[k]+'</option>';}).join("")}
+          </select>
+          ${l.instituteId
+            ? '<div class="muted" style="margin-block-start:6px;font-size:12px">آموزشگاه ساخته شده'+(l.trialDays?' · '+fa(l.trialDays)+' روز':"")+'</div>'
+            : '<button class="btn btn--p btn--sm" style="margin-block-start:6px" data-a="demoApprove" data-id="'+l.id+'">تأیید و ساخت آموزشگاه</button>'}
+        </td></tr>`;}).join("")}
+    </tbody></table></div></div>`;
+}
+
+/* ── ورود کاربران و پیامک ── */
+function viewSms(){
+  if(!S.settings)return '<div class="card"><div class="empty">در حال بارگذاری…</div></div>';
+  var bridge=S.settings.sms_mode!=="smsir";
+  var c=S.codes;
+  return h`
+  <div class="note ${bridge?"note--w":"note--i"}">
+    ${bridge
+      ? "<b>حالت پل روشن است.</b> هیچ پیامکی فرستاده نمی‌شود؛ کد ورود پایین همین صفحه ظاهر می‌شود."
+      : "<b>ارسال واقعی روشن است.</b> کدها مستقیم به موبایل کاربر پیامک می‌شوند."}
+  </div>
+  <div class="card">
+    <div class="card-h"><h3>حالت ارسال</h3></div>
+    <div class="card-b">
+      <div class="fld"><label for="f_sms_mode">کد ورود چطور به کاربر برسد</label>
+        <select id="f_sms_mode" data-k="sms_mode">
+          <option value="bridge"${bridge?" selected":""}>کد را در همین پنل ببینم (بدون پیامک)</option>
+          <option value="smsir"${bridge?"":" selected"}>با پیامک از sms.ir فرستاده شود</option>
+        </select></div>
+      ${setField("smsir_api_key","کلید API پنل sms.ir","پنل sms.ir → توسعه‌دهندگان → کلید API")}
+      ${setField("smsir_template_id","شناسهٔ قالب وریفای","فقط عدد")}
+      ${setField("smsir_param_name","نام متغیر داخل قالب","بدون #، مثلاً CODE")}
+      ${setField("otp_ttl","عمر کد ورود (ثانیه)","بین ۶۰ تا ۹۰۰")}
+    </div>
+    ${saveBar()}
+  </div>
+  ${bridge?"":h`
+  <div class="card">
+    <div class="card-h"><h3>پیامک آزمایشی</h3></div>
+    <div class="card-b">
+      <div class="fld"><label for="stPhone">شمارهٔ موبایل</label>
+        <input id="stPhone" type="tel" inputmode="numeric" dir="ltr" style="text-align:end" placeholder="09121234567"></div>
+      <button class="btn btn--p" data-a="smstest">ارسال پیامک آزمایشی</button>
+      ${S.smsTest?h`<div class="note ${S.smsTest.ok?"note--i":"note--e"}" style="margin-block-start:14px">
+        ${S.smsTest.ok
+          ? "پیامک فرستاده شد. باید عدد <b class=\"num\">"+fa(S.smsTest.code)+"</b> داخلش باشد."
+          : esc(S.smsTest.message)}
+      </div>`:""}
+    </div>
+  </div>`}
+  <div class="card">
+    <div class="card-h"><h3>کد ورود بساز</h3></div>
+    <div class="card-b">
+      <div class="fld"><label for="icPhone">شمارهٔ موبایل</label>
+        <input id="icPhone" type="tel" inputmode="numeric" dir="ltr" style="text-align:end" placeholder="09121234567"></div>
+      <button class="btn btn--p" data-a="issue">ساخت کد</button>
+      ${S.issued?h`<div class="note note--i" style="margin-block-start:14px">
+        کد <b class="num" style="font-size:22px;letter-spacing:.12em">${fa(S.issued.code)}</b>
+        برای <span class="num" dir="ltr">${fa(S.issued.phone)}</span></div>`:""}
+    </div>
+  </div>
+  ${bridge?h`
+  <div class="card">
+    <div class="card-h"><h3>کدهای زندهٔ همین لحظه</h3>
+      <button class="btn btn--g btn--sm" data-a="codes">تازه‌سازی</button></div>
+    ${!c||!c.length
+      ? '<div class="card-b"><div class="empty"><b>کسی منتظر کد نیست</b></div></div>'
+      : h`<div class="tbl-wrap"><table>
+          <thead><tr><th>موبایل</th><th>کد</th><th>باقی‌مانده</th></tr></thead>
+          <tbody>${c.map(function(x){
+            return h`<tr>
+              <td class="num" dir="ltr" style="text-align:end">${fa(x.phone)}</td>
+              <td class="num" style="font-size:20px;font-weight:700;letter-spacing:.12em">${fa(x.code)}</td>
+              <td class="num">${fa(x.seconds)} ثانیه</td></tr>`;}).join("")}
+          </tbody></table></div>`}
+  </div>`:""}`;
+}
+
+/* ── سلامت سامانه ── */
+function viewHealth(){
+  if(!S.health)return '<div class="card"><div class="empty">در حال بررسی…</div></div>';
+  var bad=S.health.filter(function(x){return x.state==="bad";}).length;
+  return h`
+  <div class="note ${bad?"note--e":"note--i"}">
+    ${bad?"<b>"+fa(bad)+" مورد نیاز به رسیدگی دارد.</b>":"همه‌چیز سرجایش است."}
+  </div>
+  <div class="card"><div class="tbl-wrap"><table>
+    <thead><tr><th>مورد</th><th>وضعیت</th><th>توضیح</th></tr></thead>
+    <tbody>${S.health.map(function(x){
+      var p=x.state==="ok"?"p-ok":x.state==="warn"?"p-warn":"p-bad";
+      var t=x.state==="ok"?"سالم":x.state==="warn"?"توجه":"خراب";
+      return h`<tr><td>${esc(x.title)}</td><td><span class="pill ${p}">${t}</span></td>
+        <td class="muted">${esc(x.detail)}</td></tr>`;}).join("")}
+    </tbody></table></div>
+    <div class="card-b" style="border-block-start:1px solid var(--line)">
+      <button class="btn btn--g" data-a="health">بررسی دوباره</button></div>
+  </div>`;
+}
+
+var EV_FA={"institute.created":"آموزشگاه تازه ساخته شد (خودثبت‌نام)","super.login":"ورود سوپرادمین",
+  "super.login_failed":"ورود ناموفق","super.settings_saved":"تنظیمات ذخیره شد",
+  "otp.send_failed":"ارسال پیامک ناموفق","super.rate_limited":"سقف تلاش ورود",
+  "otp.rate_limited_ip":"سقف درخواست پیامک","super.membership_granted":"نقش داده شد",
+  "super.membership_role_changed":"نقش تغییر کرد","super.membership_suspended":"عضویت تعلیق شد",
+  "super.membership_removed":"عضویت حذف شد","super.institute_suspended":"آموزشگاه معلق شد",
+  "super.institute_reactivated":"رفع تعلیق آموزشگاه","super.user_suspended":"کاربر مسدود شد",
+  "super.impersonation_started":"ورود به‌جای کاربر"};
+
+function viewEvents(){
+  if(!S.events)return '<div class="card"><div class="empty">در حال بارگذاری…</div></div>';
+  if(!S.events.length)return '<div class="card"><div class="empty"><b>رویدادی ثبت نشده</b></div></div>';
+  return h`
+  <div class="note note--i">تغییر نقش، تعلیق و ورود به‌جای کاربر همه اینجا ثبت می‌شوند.</div>
+  <div class="card"><div class="tbl-wrap"><table>
+    <thead><tr><th>رویداد</th><th>IP</th><th>جزئیات</th><th>زمان</th></tr></thead>
+    <tbody>${S.events.map(function(e){
+      var bad=e.action.indexOf("failed")>=0||e.action.indexOf("rate_limited")>=0||e.action.indexOf("suspend")>=0;
+      return h`<tr>
+        <td>${bad?'<span class="pill p-bad">'+esc(EV_FA[e.action]||e.action)+'</span>'
+                 :esc(EV_FA[e.action]||e.action)}</td>
+        <td class="num" dir="ltr" style="text-align:end">${esc(e.ip||"—")}</td>
+        <td class="muted" dir="ltr" style="font-size:12px;word-break:break-all">${esc(e.meta||"")}</td>
+        <td class="num">${jDateTime(e.at)}</td></tr>`;}).join("")}
+    </tbody></table></div></div>`;
+}
+
+function viewAccount(){
+  return h`
+  <div class="card">
+    <div class="card-h"><h3>تغییر رمز</h3></div>
+    <div class="card-b">
+      <div class="fld"><label for="pwOld">رمز فعلی <span class="rq">*</span></label>
+        <input id="pwOld" type="password" dir="ltr" style="text-align:end" autocomplete="current-password"></div>
+      <div class="fld"><label for="pwNew">رمز تازه <span class="rq">*</span></label>
+        <input id="pwNew" type="password" dir="ltr" style="text-align:end" autocomplete="new-password">
+        <span class="hint">حداقل ۱۰ نویسه.</span></div>
+      <div class="fld"><label for="pwNew2">تکرار رمز تازه <span class="rq">*</span></label>
+        <input id="pwNew2" type="password" dir="ltr" style="text-align:end" autocomplete="new-password"></div>
+      <button class="btn btn--p" data-a="passwd" ${S.busy?"disabled":""}>تغییر رمز</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-h"><h3>خروج</h3></div>
+    <div class="card-b"><button class="btn btn--d" data-a="logout">خروج از حساب</button></div>
+  </div>`;
+}
+
+
+/* ── نقش‌ها و مجوزها ──
+ *
+ * ماتریس دسترسی: هر ستون یک نقش، هر ردیف یک مجوز. مجوزهای سطح پلتفرم
+ * هم نشان داده می‌شوند ولی قفل‌اند — دیدنشان اشکالی ندارد، چسباندنشان
+ * به نقش را دیتابیس رد می‌کند. نشان‌دادن و قفل‌کردن، از پنهان‌کردن
+ * صادقانه‌تر است: مالک می‌بیند چه چیزهایی هست و چرا در دسترس نیست.
+ */
+var SCOPE_FA={own:"خودش",assigned_students:"زبان‌آموزان خودش",own_classes:"کلاس‌های خودش",
+              branch:"شعبه",institute:"کل آموزشگاه",platform:"کل پلتفرم"};
+
+function viewAccess(){
+  var d=S.access;
+  if(!d)return '<div class="card"><div class="empty">در حال بارگذاری…</div></div>';
+
+  var groups={},order=[];
+  d.permissions.forEach(function(p){
+    if(!groups[p.group]){groups[p.group]=[];order.push(p.group);}
+    groups[p.group].push(p);
+  });
+  var roles=d.roles;
+  var sel=S.accessRole||roles[0].id;
+  var role=roles.filter(function(r){return r.id===sel;})[0]||roles[0];
+  var locked=role.system&&role.key==="manager";
+
+  return h`
+  <div class="card" style="margin-block-end:16px">
+    <div class="card-h"><h3>نقش‌ها</h3>
+      <button class="btn btn--p btn--sm" data-a="roleNew">نقش تازه</button></div>
+    <div class="card-b">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        ${roles.map(function(r){
+          return '<button class="btn btn--'+(r.id===sel?"p":"g")+' btn--sm" data-a="roleSel" data-id="'+r.id+'">'+
+                 esc(r.name)+'<span class="muted" style="margin-inline-start:6px">'+fa(r.users)+'</span></button>';
+        }).join("")}
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h">
+      <h3>${esc(role.name)}${role.system?' <span class="pill p-info">سیستمی</span>':""}</h3>
+      <div style="display:flex;gap:8px">
+        ${locked?"":'<button class="btn btn--p btn--sm" data-a="roleSave" data-id="'+role.id+'">ذخیرهٔ بسته</button>'}
+        ${role.system?"":'<button class="btn btn--g btn--sm" data-a="roleDel" data-id="'+role.id+'">حذف نقش</button>'}
+      </div>
+    </div>
+    <div class="card-b">
+      ${role.desc?'<p class="muted" style="margin-block-end:12px">'+esc(role.desc)+'</p>':""}
+      ${locked?'<div class="note note--i">بستهٔ مدیر آموزشگاه ثابت است — او همه‌کارهٔ آموزشگاه خودش است و هر مجوز تازه‌ای خودبه‌خود به او می‌رسد.</div>':""}
+      <div class="tbl-wrap"><table id="permMatrix"><tbody>
+      ${order.map(function(g){
+        return '<tr class="grp"><td colspan="3"><b>'+esc(g)+'</b></td></tr>'+
+        groups[g].map(function(p){
+          var has=Object.prototype.hasOwnProperty.call(role.perms,p.key);
+          var sc=role.perms[p.key]||role.scope;
+          if(p.platform){
+            return '<tr><td style="opacity:.55">'+esc(p.label)+'</td>'+
+                   '<td colspan="2"><span class="pill p-mute">فقط مالک پلتفرم</span></td></tr>';
+          }
+          return '<tr><td>'+esc(p.label)+
+                 (p.write?' <span class="pill p-warn" style="font-size:10px">نوشتنی</span>':"")+'</td>'+
+                 '<td style="width:60px"><input type="checkbox" data-perm="'+p.key+'"'+(has?" checked":"")+
+                 (locked?" disabled":"")+'></td>'+
+                 '<td style="width:170px"><select data-scope="'+p.key+'"'+(locked?" disabled":"")+
+                 ' style="padding:4px;border-radius:7px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font:inherit;font-size:12.5px">'+
+                 (d.scopes||[]).map(function(x){
+                   return '<option value="'+x+'"'+(sc===x?" selected":"")+'>'+(SCOPE_FA[x]||x)+'</option>';}).join("")+
+                 '</select></td></tr>';
+        }).join("");
+      }).join("")}
+      </tbody></table></div>
+    </div>
+  </div>`;
+}
+
+var VIEWS={dash:viewDash,institutes:viewInstitutes,users:viewUsers,leads:viewLeads,access:viewAccess,notify:viewNotify,blog:viewBlog,
+           pricing:viewPricing,contact:viewContact,content:viewContent,trust:viewTrust,
+           sms:viewSms,health:viewHealth,events:viewEvents,account:viewAccount};
+
+/* ══════════ رندر ══════════ */
+function render(){
+  if(!API.admin){el("app").innerHTML=viewLogin();focusFirst();return;}
+  el("app").innerHTML=h`
+  ${!API.live?'<div class="demo-bar"><b>نسخهٔ نمایشی:</b> به بک‌اند زنده وصل نیست؛ داده‌ها نمونه‌اند و ذخیره نمی‌شوند.</div>':''}
+  <div class="shell">
+    <aside class="side">
+      <div class="brand"><i>ا</i><span>تاکورا<small>سوپرادمین پلتفرم</small></span></div>
+      <nav>${NAV.map(function(n){
+        if(n.g)return '<div class="grp">'+n.g+'</div>';
+        return '<button class="'+(S.view===n.v?"on":"")+'" data-go="'+n.v+'">'+n.t+'</button>';
+      }).join("")}</nav>
+      <div class="side-f">
+        <div class="who"><b>${esc(API.admin.name||API.admin.username)}</b>
+          <span dir="ltr">${esc(API.admin.username)}</span></div>
+        <button class="btn btn--g btn--sm" data-a="theme" aria-label="روشن و تاریک">◐</button>
+      </div>
+    </aside>
+    <div class="main">
+      <header class="top"><h1>${TITLES[S.view]||""}</h1></header>
+      <div class="page">${(VIEWS[S.view]||viewDash)()}</div>
+    </div>
+  </div>
+  ${viewReasonModal()}`;
+
+  /*
+     ویرایشگر بعد از *هر* render دوباره پر می‌شود، اینجا و نه در
+     صداکننده‌ها.
+
+     contenteditable با value پر نمی‌شود و innerHTML باید بعد از
+     نشستن عنصر در DOM بیاید. نسخهٔ اول این کار را در هر صداکننده
+     انجام می‌داد و یکی از آن‌ها — loadBlog که async است — بعدِ
+     پرکردن، دوباره render می‌کرد. نتیجه: متنِ تازه‌ذخیره‌شده از
+     ویرایشگر پاک می‌شد و کلیک بعدیِ کاربر «متن نوشته خالی است»
+     می‌گرفت. یعنی باگی که نوشتهٔ کسی را می‌برد.
+  */
+  blogFillBody();
+}
+
+function focusFirst(){
+  var f=document.querySelector("#app input");
+  if(f)f.focus();
+}
+
+/* ══════════ دادهٔ نمونه (حالت بدون بک‌اند) ══════════ */
+function demoStats(){
+  return {institutes:12,institutesSuspended:1,users:340,usersSuspended:2,managers:12,teachers:48,
+    students:280,classes:96,published:81,sessions:1200,held:860,submissions:410,leadsNew:3,otpToday:57};
+}
+function demoInstitutes(){
+  return [
+    {id:"i1",name:"آموزشگاه پردیس",city:"تهران",phone:"02188112233",termWeeks:12,status:"active",suspendedReason:null,createdAt:"2025-11-01",members:41,managers:1,teachers:6,students:34},
+    {id:"i2",name:"زبان‌سرای ایران‌زمین",city:"اصفهان",phone:"03132445566",termWeeks:10,status:"active",suspendedReason:null,createdAt:"2025-09-14",members:22,managers:1,teachers:3,students:18},
+    {id:"i3",name:"مؤسسهٔ آفتاب",city:"شیراز",phone:"07136778899",termWeeks:12,status:"suspended",suspendedReason:"شهریهٔ اشتراک پرداخت‌نشده",createdAt:"2025-06-20",members:15,managers:1,teachers:2,students:12},
+    {id:"i4",name:"سارا محمدی (تدریس خصوصی)",city:"کرج",phone:"09121110000",termWeeks:8,status:"active",suspendedReason:null,createdAt:"2026-02-02",members:5,managers:1,teachers:1,students:3},
+  ];
+}
+function demoInstituteDetail(id){
+  var list=demoInstitutes(); var inst=list.filter(function(i){return i.id===id;})[0]||list[0];
+  return {institute:inst,members:[
+    {membershipId:"m1",userId:"u1",name:"علی رضایی",phone:"09121234567",role:"manager",status:"active",hourlyRate:0,since:"2025-11-01"},
+    {membershipId:"m2",userId:"u2",name:"مریم کاظمی",phone:"09359876543",role:"teacher",status:"active",hourlyRate:900000,since:"2025-11-05"},
+    {membershipId:"m3",userId:"u3",name:"امیر حسینی",phone:"09121112233",role:"student",status:"active",hourlyRate:0,since:"2025-11-10"},
+  ]};
+}
+function demoUsers(q){
+  var all=[
+    {id:"u1",phone:"09121234567",name:"علی رضایی",status:"active",createdAt:"2025-11-01",lastLoginAt:"2026-08-15 10:20:00",memberships:1},
+    {id:"u2",phone:"09359876543",name:"مریم کاظمی",status:"active",createdAt:"2025-11-05",lastLoginAt:"2026-08-14 08:05:00",memberships:2},
+    {id:"u3",phone:"09121112233",name:"امیر حسینی",status:"active",createdAt:"2025-11-10",lastLoginAt:"2026-08-10 19:40:00",memberships:1},
+  ];
+  var qq=(q||"").toLowerCase();
+  return all.filter(function(u){return u.name.indexOf(q)>=0||u.phone.indexOf(enDigits(q))>=0;});
+}
+function demoUserDetail(id){
+  var u=demoUsers("").filter(function(x){return x.id===id;})[0]||demoUsers("")[0];
+  return {user:u,memberships:[
+    {membershipId:"m1",instituteId:"i1",instituteName:"آموزشگاه پردیس",role:"manager",status:"active",hourlyRate:0,since:"2025-11-01"},
+  ]};
+}
+function demoLeads(){
+  return {counts:{new:2,contacted:1,won:1,lost:0},leads:[
+    {id:"l1",name:"نگار احمدی",phone:"09120001111",email:null,institute:"زبانکدهٔ نگار",students:"۱۵۰",note:"دنبال جایگزین اکسل هستیم",status:"new",adminNote:null,mailed:true,at:"2026-08-14 09:00:00"},
+    {id:"l2",name:"حسین یزدانی",phone:"09120002222",email:"h.yazdani@example.com",institute:null,students:null,note:null,status:"contacted",mailed:true,at:"2026-08-12 14:00:00"},
+  ]};
+}
+function demoSettings(){
+  return {contact_phone:"",contact_email:"info@talkora.ir",demo_email:"info@talkora.ir",contact_address:"",
+    support_hours:"شنبه تا چهارشنبه، ۹ تا ۱۷",price_basic:"4900000",price_growth:"17000000",price_pro:"44000000",
+    annual_discount:"20",trial_days:"14",hero_title:"آموزشگاه‌تان را از یک صفحه اداره کنید",
+    hero_sub:"ثبت‌نام، ترم‌بندی، حضور و غیاب، کلاس آنلاین، تکلیف و نمره، شهریهٔ قسطی — همه در یک پنل فارسی.",
+    cta_text:"درخواست دموی رایگان",banner_text:"",banner_on:"0",sms_mode:"bridge",smsir_api_key:"",
+    smsir_template_id:"",smsir_param_name:"CODE",otp_ttl:"300",enamad_html:"",samandehi_html:"",
+    maintenance:"0",signup_open:"1"};
+}
+function demoHealth(){
+  return [
+    {title:"نسخهٔ PHP",state:"ok",detail:"PHP 8.2"},
+    {title:"پایگاه داده",state:"ok",detail:"متصل — ۲۲ جدول (مشترک با پنل آموزشگاه‌ها)"},
+    {title:"گواهی SSL",state:"ok",detail:"پنل روی https باز شده"},
+    {title:"پیامک",state:"warn",detail:"حالت پل: کد ورود در همین پنل دیده می‌شود."},
+  ];
+}
+function demoEvents(){
+  return [
+    {action:"super.login",ip:"5.springboot.demo",meta:"{}",at:"2026-08-16 07:10:00"},
+    {action:"super.membership_role_changed",ip:"5.springboot.demo",meta:'{"from":"student","to":"teacher"}',at:"2026-08-15 12:30:00"},
+    {action:"super.institute_suspended",ip:"5.springboot.demo",meta:'{"reason":"شهریه پرداخت نشده"}',at:"2026-08-11 09:00:00"},
+  ];
+}
+
+/* ══════════ بارگذاری داده ══════════ */
+function need(view){
+  if(!API.live){
+    if(view==="dash"&&!S.stats)S.stats=demoStats();
+    if(view==="institutes"&&!S.institutes&&!S.instDetail)S.institutes=demoInstitutes();
+    if(view==="leads"&&!S.leads)S.leads=demoLeads();
+    if(view==="events"&&!S.events)S.events=demoEvents();
+    if(view==="health"&&!S.health)S.health=demoHealth();
+    if(!S.settings&&["pricing","contact","content","trust","sms"].indexOf(view)>=0)S.settings=demoSettings();
+    return Promise.resolve();
+  }
+  if(view==="dash"&&!S.stats){
+    /*
+     * جاروی قراردادهای تمام‌شده، همراه آمار پیشخوان.
+     *
+     * کرون‌جاب نداریم و روی هاست اشتراکی هم نمی‌شود داشت. هر بار که
+     * سوپرادمین پیشخوان را باز می‌کند، قراردادهای گذشته بسته می‌شوند
+     * و آن‌هایی که تا دو هفتهٔ دیگر تمام می‌شوند هشدار می‌گیرند. همان
+     * الگوی demo.sweep که از قبل کار می‌کرد.
+     */
+    return Promise.all([
+      call({action:"stats"}).then(function(r){if(r.ok)S.stats=r.stats;}),
+      call({action:"institutes.sweepExpired"}).then(function(r){
+        if(!r.ok)return;
+        S.endingSoon=r.endingSoon||[];
+        if(r.suspended>0)toast(fa(r.suspended)+" آموزشگاه به‌خاطر پایان قرارداد تعلیق شد");
+      })
+    ]);
+  }
+  if(view==="institutes"&&!S.institutes&&!S.instDetail) return doInstSearch();
+  if(view==="leads"&&!S.leads)     return call({action:"leads"}).then(function(r){if(r.ok)S.leads=r;});
+  if(view==="blog"&&!S.blog)       return call({action:"blog.list"}).then(function(r){if(r.ok)S.blog=r;});
+  if(view==="access"&&!S.access)   return call({action:"access.catalogue"}).then(function(r){if(r.ok)S.access=r;});
+  if(view==="events"&&!S.events)   return call({action:"recent"}).then(function(r){if(r.ok)S.events=r.events;});
+  if(view==="health"&&!S.health)   return call({action:"diagnostics"}).then(function(r){if(r.ok)S.health=r.checks;});
+  if(view==="sms"){
+    var jobs=[call({action:"loginCodes"}).then(function(r){if(r.ok)S.codes=r.codes;})];
+    if(!S.settings)jobs.push(call({action:"settings"}).then(function(r){if(r.ok)S.settings=r.settings;}));
+    return Promise.all(jobs);
+  }
+  if(!S.settings&&["pricing","contact","content","trust"].indexOf(view)>=0){
+    return call({action:"settings"}).then(function(r){if(r.ok)S.settings=r.settings;});
+  }
+  return Promise.resolve();
+}
+
+function doInstSearch(){
+  if(!API.live){S.institutes=demoInstitutes().filter(function(i){
+    return !S.instQ||i.name.indexOf(S.instQ)>=0||( i.city||"").indexOf(S.instQ)>=0;
+  });return Promise.resolve();}
+  return call({action:"institutes.list",q:S.instQ,status:S.instStatus}).then(function(r){
+    if(r.ok)S.institutes=r.institutes; else toast(r.message||"جست‌وجو ناموفق بود");
+  });
+}
+function doInstOpen(id){
+  if(!API.live){S.instDetail=demoInstituteDetail(id);render();return;}
+  S.instDetail=null; render();
+  call({action:"institutes.get",id:id}).then(function(r){
+    if(r.ok)S.instDetail=r; else toast(r.message||"باز نشد");
+    render();
+  });
+}
+/*
+ * فهرست کاربران — بی‌شرط بار می‌شود، نه فقط وقتی کسی چیزی تایپ کند.
+ *
+ * نسخهٔ قبلی تا دو حرف وارد نمی‌شد هیچ نشان نمی‌داد، و سوپرادمینی که
+ * می‌خواست بداند اصلاً چند نفر ثبت‌نام کرده‌اند باید نام کسی را حدس
+ * می‌زد. حالا پالایه‌ها فهرست را باریک می‌کنند، نه اینکه بسازندش.
+ */
+function doUserLoad(resetPage){
+  if(resetPage)S.userFilter.page=1;
+  if(!API.live){S.userResults=demoUsers(S.userQ);S.userMeta=null;render();return;}
+  S.userBusy=true;
+  var f=S.userFilter;
+  call({action:"users.list",q:S.userQ,status:f.status,role:f.role,
+        instituteId:f.instituteId,page:f.page,limit:f.limit}).then(function(r){
+    S.userBusy=false;
+    if(r.ok){
+      S.userResults=r.users;
+      S.userMeta={total:r.total,page:r.page,pages:r.pages,limit:r.limit};
+    }else toast(r.message||"فهرست نیامد");
+    render();
+  });
+  // آمار بالای صفحه یک‌بار می‌آید؛ با پالایه عوض نمی‌شود
+  if(!S.userStats){
+    call({action:"users.stats"}).then(function(r){
+      if(r.ok){S.userStats=r.stats;render();}
+    });
+  }
+}
+function mb2(s){return (s||"").length;}
+function doUserOpen(id){
+  if(!API.live){S.userDetail=demoUserDetail(id);render();return;}
+  // کاتالوگ مجوزها برای فهرست کشویی لازم است؛ یک‌بار می‌آید و می‌ماند
+  if(!S.access)call({action:"access.catalogue"}).then(function(r){if(r.ok){S.access=r;render();}});
+  S.userDetail=null; render();
+  call({action:"users.get",id:id}).then(function(r){
+    if(r.ok)S.userDetail=r; else toast(r.message||"باز نشد");
+    render();
+  });
+}
+
+var codeTimer=null;
+function syncCodeTimer(){
+  if(S.view==="sms"&&!codeTimer&&API.live){
+    codeTimer=setInterval(function(){
+      if(S.view!=="sms"||!API.admin||!API.live)return;
+      call({action:"loginCodes"}).then(function(r){
+        if(!r.ok)return; S.codes=r.codes; if(S.view==="sms")render();
+      });
+    },5*60*1000);
+  }else if((S.view!=="sms"||!API.live)&&codeTimer){
+    clearInterval(codeTimer); codeTimer=null;
+  }
+}
+
+function goView(v){
+  S.view=v; S.instDetail=null; S.userDetail=null;
+  if(v!=="sms"){S.issued=null;S.smsTest=null;}
+  render(); syncCodeTimer();
+  need(v).then(function(){render();syncCodeTimer();});
+}
+
+/* ══════════ کنش‌ها ══════════ */
+function readForm(){
+  var out={};
+  Array.prototype.forEach.call(document.querySelectorAll("[data-k]"),function(f){
+    var v=f.value;
+    if(f.dataset.money==="1"){
+      var t=+enDigits(String(v).replace(/[٬,\s]/g,""))||0;
+      v=String(t*10);
+    }
+    out[f.dataset.k]=v;
+  });
+  return out;
+}
+
+document.addEventListener("click",function(e){
+  var g=e.target.closest("[data-go]");
+  if(g){goView(g.dataset.go);return;}
+
+  var oi=e.target.closest("[data-openinst]");
+  if(oi){S.instDetail=null;doInstOpen(oi.dataset.openinst);return;}
+
+  var ou=e.target.closest("[data-openuser]");
+  if(ou){S.userDetail=null;doUserOpen(ou.dataset.openuser);return;}
+
+  /*
+     نوشته‌های فرم را پیش از هر render برمی‌داریم؛ وگرنه زدن روی یک
+     بخش یا لحن، عنوان و متنِ تایپ‌شده را پاک می‌کند.
+  */
+  var seg=e.target.closest("[data-seg]");
+  if(seg){ nfRead(); S.notifDraft.segment=seg.dataset.seg; S.notifDraft.err=""; render(); return; }
+  var kd=e.target.closest("[data-kind]");
+  if(kd){ nfRead(); S.notifDraft.kind=kd.dataset.kind; render(); return; }
+
+  /*
+     نوار ابزار ویرایشگر.
+     preventDefault لازم است وگرنه کلیک، تمرکز را از contenteditable
+     می‌گیرد و execCommand روی انتخابِ ازدست‌رفته اثری ندارد.
+  */
+  var ed=e.target.closest("[data-ed]");
+  if(ed){
+    e.preventDefault();
+    var body=el("bBody"); if(body)body.focus();
+    document.execCommand(ed.dataset.ed,false,ed.dataset.v?"<"+ed.dataset.v+">":null);
+    blogRead();
+    return;
+  }
+
+  var b=e.target.closest("[data-a]");
+  if(!b)return;
+  var a=b.dataset.a;
+
+
+  /* ── وبلاگ ── */
+  if(a==="blogNew"){
+    S.blogEdit={id:"",title:"",slug:"",excerpt:"",body:"",cover:null,coverAlt:"",
+                categoryId:"",metaTitle:"",metaDesc:"",author:"تیم تاکورا",
+                status:"draft",busy:false,err:""};
+    render(); return;
+  }
+  if(a==="blogBack"){ S.blogEdit=null; loadBlog(true); render(); return; }
+  if(a==="blogEdit"){
+    call({action:"blog.get",id:b.dataset.id}).then(function(r){
+      if(!r.ok){toast(r.message||"باز نشد");return;}
+      S.blogEdit=Object.assign({busy:false,err:""},r.post);
+      render();
+    });
+    return;
+  }
+  if(a==="blogCoverClear"){ blogRead(); S.blogEdit.cover=null; render(); return; }
+
+  if(a==="blogSave"){
+    if(S.blogEdit&&S.blogEdit.busy)return;
+    blogRead();
+    var p=S.blogEdit;
+    if(!p.title.trim()){ p.err="عنوان را بنویسید."; render(); return; }
+    if(!p.body.trim()){ p.err="متن نوشته خالی است."; render(); return; }
+    p.busy=true; p.err=""; render();
+    call({action:"blog.save",id:p.id||"",title:p.title,slug:p.slug,excerpt:p.excerpt,
+          body:p.body,cover:p.cover||"",coverAlt:p.coverAlt,categoryId:p.categoryId,
+          metaTitle:p.metaTitle,metaDesc:p.metaDesc,author:p.author}).then(function(r){
+      S.blogEdit.busy=false;
+      if(!r.ok){ S.blogEdit.err=r.message||"ذخیره نشد"; render(); return; }
+      S.blogEdit.id=r.id; S.blogEdit.slug=r.slug;
+      toast("ذخیره شد — "+fa(r.readingMin)+" دقیقه خواندن");
+      loadBlog(true); render();
+    });
+    return;
+  }
+
+  if(a==="blogPub"){
+    var pid=b.dataset.id, on=b.dataset.on==="1";
+    /*
+     * اگر روی صفحهٔ ویرایش هستیم، اول ذخیره بعد انتشار.
+     *
+     * وگرنه دکمهٔ «ذخیره و انتشار» نسخهٔ قبلی را منتشر می‌کرد و
+     * نویسنده فکر می‌کرد تغییرهایش رفته — بدترین نوع اشتباه، چون
+     * بی‌صداست.
+     */
+    var go=function(){
+      call({action:"blog.publish",id:pid,on:on}).then(function(r){
+        if(!r.ok){toast(r.message||"انجام نشد");return;}
+        toast(on?"منتشر شد":"از انتشار درآمد");
+        if(S.blogEdit&&S.blogEdit.id===pid)S.blogEdit.status=r.status;
+        loadBlog(true); render();
+      });
+    };
+    if(S.blogEdit&&S.blogEdit.id===pid){
+      blogRead();
+      var q=S.blogEdit;
+      call({action:"blog.save",id:q.id,title:q.title,slug:q.slug,excerpt:q.excerpt,
+            body:q.body,cover:q.cover||"",coverAlt:q.coverAlt,categoryId:q.categoryId,
+            metaTitle:q.metaTitle,metaDesc:q.metaDesc,author:q.author}).then(function(r){
+        if(!r.ok){toast(r.message||"ذخیره نشد");return;}
+        S.blogEdit.slug=r.slug; go();
+      });
+    } else go();
+    return;
+  }
+
+  if(a==="blogDelete"){
+    if(!confirm("این نوشته و تصویر شاخصش برای همیشه پاک می‌شوند. مطمئنید؟"))return;
+    call({action:"blog.delete",id:b.dataset.id}).then(function(r){
+      if(!r.ok){toast(r.message||"حذف نشد");return;}
+      toast("نوشته حذف شد");
+      S.blogEdit=null; loadBlog(true); render();
+    });
+    return;
+  }
+
+  if(a==="blogLink"){
+    var url=prompt("نشانی پیوند:","https://");
+    if(!url)return;
+    document.execCommand("createLink",false,url);
+    blogRead(); return;
+  }
+  if(a==="blogImage"){ var fi=el("bInlineFile"); if(fi)fi.click(); return; }
+
+  /* ── اعلان پلتفرم ── */
+  if(a==="nf-refresh"){ loadNotify(true); toast("تازه‌سازی شد"); return; }
+  if(a==="nf-send"){
+    if(S.notifDraft.busy)return;
+    nfRead();
+    var n=S.notifDraft;
+    if(!n.segment){ n.err="بخش مخاطب را انتخاب کنید."; render(); return; }
+    if(!n.title.trim()){ n.err="عنوان را بنویسید."; render(); return; }
+    if(!n.body.trim()){ n.err="متن اعلان را بنویسید."; render(); return; }
+    n.busy=true; n.err=""; render();
+    call({action:"notify.send",segment:n.segment,title:n.title.trim(),
+          body:n.body.trim(),kind:n.kind}).then(function(r){
+      S.notifDraft.busy=false;
+      if(!r.ok){ S.notifDraft.err=r.message||"فرستاده نشد."; render(); return; }
+      S.notifDraft.title=""; S.notifDraft.body="";
+      toast("به "+fa(r.recipients)+" نفر فرستاده شد — "+r.audience);
+      loadNotify(true);
+    });
+    return;
+  }
+
+  /* ── اعطا و سلب موردی ── */
+  if(a==="permAllow"||a==="permDeny"){
+    var days=parseInt(String((el("apDays")||{}).value||"0").replace(/[۰-۹]/g,function(c){
+      return "۰۱۲۳۴۵۶۷۸۹".indexOf(c);}),10)||0;
+    call({action:"user.permSet",userId:b.dataset.uid,
+          instituteId:(el("apInst")||{}).value,perm:(el("apPerm")||{}).value,
+          effect:a==="permAllow"?"allow":"deny",
+          scope:(el("apScope")||{}).value,days:days})
+      .then(function(r){
+        if(!r.ok){toast(r.message||"انجام نشد");return;}
+        toast(a==="permAllow"?"دسترسی داده شد":"دسترسی گرفته شد");
+        doUserOpen(b.dataset.uid);
+      });
+    return;
+  }
+
+  if(a==="permClear"){
+    call({action:"user.permSet",userId:b.dataset.uid,instituteId:b.dataset.iid,
+          perm:b.dataset.perm,effect:"clear"}).then(function(r){
+      if(!r.ok){toast(r.message||"برداشته نشد");return;}
+      toast("استثنا برداشته شد");
+      doUserOpen(b.dataset.uid);
+    });
+    return;
+  }
+
+  /* ── نقش‌ها و مجوزها ── */
+  if(a==="roleSel"){S.accessRole=b.dataset.id;render();return;}
+
+  if(a==="roleNew"){
+    var nm=prompt("نام نقش تازه (مثلاً: مسئول مالی)");
+    if(!nm||!nm.trim())return;
+    var ky=prompt("کلید انگلیسی نقش (مثلاً: financial_manager)");
+    if(!ky||!ky.trim())return;
+    call({action:"roles.create",name:nm.trim(),key:ky.trim(),scope:"institute"})
+      .then(function(r){
+        if(!r.ok){toast(r.message||"ساخته نشد");return;}
+        S.access=null;S.accessRole=r.id;
+        need("access").then(render);
+      });
+    return;
+  }
+
+  if(a==="roleDel"){
+    if(!confirm("این نقش حذف شود؟ اگر به کسی داده شده باشد، حذف نمی‌شود."))return;
+    call({action:"roles.delete",id:b.dataset.id}).then(function(r){
+      if(!r.ok){toast(r.message||"حذف نشد");return;}
+      S.access=null;S.accessRole=null;need("access").then(render);
+    });
+    return;
+  }
+
+  /*
+   * بستهٔ مجوز یک‌جا فرستاده می‌شود، نه تیک‌به‌تیک. اگر هر تیک یک
+   * درخواست بود، نیمه‌کاره‌ماندن وسط کار یعنی نقشی با دسترسی‌ای که
+   * مالک هرگز قصدش را نداشته.
+   */
+  if(a==="roleSave"){
+    var perms={};
+    document.querySelectorAll("#permMatrix input[data-perm]").forEach(function(cb){
+      if(!cb.checked)return;
+      var k=cb.dataset.perm;
+      var sc=document.querySelector('#permMatrix select[data-scope="'+k+'"]');
+      perms[k]=sc?sc.value:"own";
+    });
+    call({action:"roles.setPerms",id:b.dataset.id,perms:perms}).then(function(r){
+      if(!r.ok){toast(r.message||"ذخیره نشد");return;}
+      toast("بستهٔ نقش ذخیره شد — "+fa(r.count)+" مجوز");
+      S.access=null;need("access").then(render);
+    });
+    return;
+  }
+
+  /* ── تأیید درخواست دمو ── */
+  if(a==="demoApprove"){
+    var dv=prompt("دورهٔ آزمایشی چند روز باشد؟","14");
+    if(dv===null)return;
+    var dn=parseInt(String(dv).replace(/[۰-۹]/g,function(c){return "۰۱۲۳۴۵۶۷۸۹".indexOf(c);}),10);
+    if(!dn||dn<1){toast("عدد معتبر وارد کنید");return;}
+    call({action:"demo.approve",id:b.dataset.id,days:dn}).then(function(r){
+      if(!r.ok){toast(r.message||"انجام نشد");return;}
+      toast("آموزشگاه دمو ساخته شد — "+fa(dn)+" روز");
+      S.leads=null;need("leads").then(render);
+    });
+    return;
+  }
+
+  if(a==="theme"){
+    var root=document.documentElement, cur=root.getAttribute("data-theme");
+    if(!cur)cur=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+    root.setAttribute("data-theme",cur==="dark"?"light":"dark");
+    return;
+  }
+
+  if(a==="login"||a==="setup"){
+    if(S.busy)return;
+    var u=(el("lgUser")||{}).value||"", p=(el("lgPass")||{}).value||"";
+    if(!u.trim()||!p){S.err="نام کاربری و رمز را وارد کنید.";render();return;}
+    var body={action:a==="setup"?"bootstrap":"login",username:u.trim(),password:p};
+    if(a==="setup"){
+      body.setupKey=(el("lgKey")||{}).value||"";
+      body.fullName=(el("lgName")||{}).value||"";
+      if(!body.setupKey){S.err="کلید راه‌اندازی را وارد کنید.";render();return;}
+      if(p.length<10){S.err="رمز باید حداقل ۱۰ نویسه باشد.";render();return;}
+    }
+    S.busy=true; S.err=""; render();
+    call(body).then(function(r){
+      S.busy=false;
+      if(!r.ok){S.err=r.message||"ورود نشد.";render();return;}
+      API.admin=r.admin; API.needsSetup=false; API.live=true; S.err="";
+      goView("dash"); toast("خوش آمدید");
+    });
+    return;
+  }
+
+  if(a==="save"){
+    if(S.busy)return;
+    var payload=readForm();
+    if(!API.live){S.settings=Object.assign({},S.settings,payload);render();toast("در نسخهٔ نمایشی ذخیره نمی‌شود.");return;}
+    S.busy=true; render();
+    call({action:"saveSettings",settings:payload}).then(function(r){
+      S.busy=false;
+      if(!r.ok){render();toast(r.message||"ذخیره نشد");return;}
+      S.settings=r.settings; render(); toast("ذخیره شد");
+    });
+    return;
+  }
+
+  if(a==="codes"){call({action:"loginCodes"}).then(function(r){if(r.ok){S.codes=r.codes;render();}});return;}
+
+  if(a==="health"){
+    S.health=null; render();
+    if(!API.live){S.health=demoHealth();render();return;}
+    call({action:"diagnostics"}).then(function(r){if(r.ok)S.health=r.checks;render();});
+    return;
+  }
+
+  if(a==="issue"){
+    if(S.busy)return;
+    var ph=enDigits(((el("icPhone")||{}).value||"")).replace(/\s/g,"");
+    if(!/^09\d{9}$/.test(ph)){toast("شماره باید ۱۱ رقم و با ۰۹ شروع شود");return;}
+    if(!API.live){S.issued={code:"12345",phone:ph};render();toast("نمونه — پیامکی نرفته");return;}
+    S.busy=true;
+    call({action:"issueCode",phone:ph}).then(function(r){
+      S.busy=false;
+      if(!r.ok){render();toast(r.message||"ساخته نشد");return;}
+      S.issued=r.code?{code:r.code,phone:r.phone}:null;
+      S.codes=null; need("sms").then(render);
+      toast(r.code?"کد ساخته شد":"کد پیامک شد");
+    });
+    return;
+  }
+
+  if(a==="smstest"){
+    if(S.busy)return;
+    var sp=enDigits(((el("stPhone")||{}).value||"")).replace(/\s/g,"");
+    if(!/^09\d{9}$/.test(sp)){toast("شماره باید ۱۱ رقم و با ۰۹ شروع شود");return;}
+    if(!API.live){toast("در نسخهٔ نمایشی پیامکی نمی‌رود.");return;}
+    S.busy=true; toast("در حال ارسال…");
+    call({action:"smsTest",phone:sp}).then(function(r){
+      S.busy=false;
+      S.smsTest={ok:!!r.ok,code:r.code,param:r.param,template:r.template,message:r.message||""};
+      render(); toast(r.ok?"فرستاده شد":"فرستاده نشد");
+    });
+    return;
+  }
+
+  if(a==="testmail"){
+    if(!API.live){toast("در نسخهٔ نمایشی ایمیلی نمی‌رود.");return;}
+    toast("در حال ارسال…");
+    call({action:"testMail"}).then(function(r){toast(r.ok?"ایمیل آزمایشی فرستاده شد":(r.message||"ارسال نشد"));});
+    return;
+  }
+
+  if(a==="passwd"){
+    if(S.busy)return;
+    var o=(el("pwOld")||{}).value||"", n=(el("pwNew")||{}).value||"", n2=(el("pwNew2")||{}).value||"";
+    if(n.length<10){toast("رمز تازه باید حداقل ۱۰ نویسه باشد");return;}
+    if(n!==n2){toast("تکرار رمز با خودش نمی‌خواند");return;}
+    if(!API.live){toast("در نسخهٔ نمایشی تغییری اعمال نمی‌شود.");return;}
+    S.busy=true;
+    call({action:"password",current:o,new:n}).then(function(r){
+      S.busy=false; render(); toast(r.ok?"رمز عوض شد":(r.message||"عوض نشد"));
+    });
+    return;
+  }
+
+  if(a==="logout"){
+    if(!API.live){API.admin=null;render();return;}
+    call({action:"logout"}).then(function(){
+      API.admin=null; S.settings=S.leads=S.stats=S.events=null; S.codes=S.health=S.issued=S.smsTest=null;
+      if(codeTimer){clearInterval(codeTimer);codeTimer=null;}
+      render(); toast("خارج شدید");
+    });
+    return;
+  }
+
+  if(a==="instSearch"){
+    S.instQ=(el("instQ")||{}).value||""; S.instStatus=(el("instStatus")||{}).value||"";
+    S.institutes=null; render(); doInstSearch().then(render);
+    return;
+  }
+  if(a==="instBack"){S.instDetail=null;render();return;}
+  if(a==="instCreate"){
+    if(S.busy)return;
+    var body={
+      name:(el("niName")||{}).value||"", city:(el("niCity")||{}).value||"",
+      ownerName:(el("niOwnerName")||{}).value||"",
+      ownerPhone:enDigits(((el("niOwnerPhone")||{}).value||"")).replace(/\s/g,""),
+    };
+    if(!body.name.trim()){toast("نام آموزشگاه را وارد کنید");return;}
+    if(!body.ownerName.trim()){toast("نام مدیر را وارد کنید");return;}
+    if(!/^09\d{9}$/.test(body.ownerPhone)){toast("شمارهٔ مدیر باید ۱۱ رقم و با ۰۹ شروع شود");return;}
+    if(!API.live){toast("در نسخهٔ نمایشی ساخته نمی‌شود.");return;}
+    S.busy=true; render();
+    call(Object.assign({action:"institutes.create"},body)).then(function(r){
+      S.busy=false;
+      if(!r.ok){render();toast(r.message||"ساخته نشد");return;}
+      toast("آموزشگاه ساخته شد"); S.institutes=null; render(); doInstSearch().then(render);
+    });
+    return;
+  }
+  if(a==="instSuspend"||a==="instReactivate"){
+    var iid=b.dataset.id;
+    if(a==="instSuspend"){
+      var reason=prompt("دلیل تعلیق را بنویسید:");
+      if(!reason||!reason.trim())return;
+      if(!API.live){toast("در نسخهٔ نمایشی اعمال نمی‌شود.");return;}
+      call({action:"institutes.suspend",id:iid,reason:reason.trim()}).then(function(r){
+        if(!r.ok){toast(r.message||"انجام نشد");return;}
+        toast("آموزشگاه معلق شد"); doInstOpen(iid);
+      });
+    }else{
+      if(!API.live){toast("در نسخهٔ نمایشی اعمال نمی‌شود.");return;}
+      call({action:"institutes.reactivate",id:iid}).then(function(r){
+        if(!r.ok){toast(r.message||"انجام نشد");return;}
+        toast("رفع تعلیق شد"); doInstOpen(iid);
+      });
+    }
+    return;
+  }
+  if(a==="instWindow"){
+    var wid=b.dataset.id;
+    var from=jSelVal("wFrom"), to=jSelVal("wTo");
+    call({action:"institutes.setWindow",id:wid,from:from,to:to}).then(function(r){
+      if(!r.ok){toast(r.message||"ذخیره نشد");return;}
+      toast(r.to
+        ? (r.daysLeft>=0 ? "بازه ذخیره شد — "+fa(r.daysLeft)+" روز مانده"
+                         : "بازه ذخیره شد — قرارداد گذشته است")
+        : "بازه بدون تاریخ پایان ذخیره شد");
+      doInstOpen(wid);
+    });
+    return;
+  }
+  if(a==="instJitsiToggle"){
+    var jiid=b.dataset.id, jon=b.dataset.on==="1";
+    if(!API.live){toast("در نسخهٔ نمایشی اعمال نمی‌شود.");return;}
+    call({action:"institutes.setJitsiEnabled",id:jiid,on:jon}).then(function(r){
+      if(!r.ok){toast(r.message||"انجام نشد");return;}
+      toast(jon?"جلسهٔ میت برای این آموزشگاه فعال شد":"جلسهٔ میت برای این آموزشگاه غیرفعال شد");
+      doInstOpen(jiid);
+    });
+    return;
+  }
+
+  if(a==="userFilter"){
+    S.userQ=(el("userQ")||{}).value||"";
+    S.userFilter.role=(el("ufRole")||{}).value||"all";
+    S.userFilter.status=(el("ufStatus")||{}).value||"all";
+    S.userFilter.instituteId=(el("ufInst")||{}).value||"";
+    doUserLoad(true);
+    return;
+  }
+  if(a==="userFilterClear"){
+    S.userQ="";
+    S.userFilter={status:"all",role:"all",instituteId:"",page:1,limit:S.userFilter.limit};
+    doUserLoad(true);
+    return;
+  }
+  if(a==="userPage"){
+    var pg=parseInt(b.dataset.p,10);
+    if(pg>=1){S.userFilter.page=pg;doUserLoad(false);}
+    return;
+  }
+  if(a==="userBack"){S.userDetail=null;render();return;}
+  if(a==="userSuspend"||a==="userReactivate"){
+    var uid2=b.dataset.id;
+    if(!API.live){toast("در نسخهٔ نمایشی اعمال نمی‌شود.");return;}
+    call({action:a==="userSuspend"?"users.suspend":"users.reactivate",id:uid2}).then(function(r){
+      if(!r.ok){toast(r.message||"انجام نشد");return;}
+      toast("ثبت شد"); doUserOpen(uid2);
+    });
+    return;
+  }
+  if(a==="memAdd"){
+    var mp=enDigits(((el("addPhone")||{}).value||"")).replace(/\s/g,"");
+    var mrole=(el("addRole")||{}).value||"student";
+    var miid=b.dataset.inst;
+    if(!/^09\d{9}$/.test(mp)){toast("شماره باید ۱۱ رقم و با ۰۹ شروع شود");return;}
+    if(!API.live){toast("در نسخهٔ نمایشی اعمال نمی‌شود.");return;}
+    call({action:"users.search",q:mp}).then(function(r){
+      var u=r.ok&&r.users&&r.users[0];
+      if(!u){toast("کاربری با این شماره پیدا نشد");return;}
+      call({action:"membership.add",userId:u.id,instituteId:miid,role:mrole}).then(function(r2){
+        if(!r2.ok){toast(r2.message||"افزوده نشد");return;}
+        toast("افزوده شد"); doInstOpen(miid);
+      });
+    });
+    return;
+  }
+  if(a==="memSuspend"||a==="memReactivate"){
+    var mid=b.dataset.id;
+    if(!API.live){toast("در نسخهٔ نمایشی اعمال نمی‌شود.");return;}
+    call({action:a==="memSuspend"?"membership.suspend":"membership.reactivate",membershipId:mid}).then(function(r){
+      if(!r.ok){toast(r.message||"انجام نشد");return;}
+      toast("ثبت شد");
+      if(S.instDetail)doInstOpen(S.instDetail.institute.id);
+      else if(S.userDetail)doUserOpen(S.userDetail.user.id);
+    });
+    return;
+  }
+  if(a==="memMeetingToggle"){
+    var mmid=b.dataset.id, mmon=b.dataset.on==="1";
+    if(!API.live){toast("در نسخهٔ نمایشی اعمال نمی‌شود.");return;}
+    call({action:"membership.setMeetingAccess",membershipId:mmid,on:mmon}).then(function(r){
+      if(!r.ok){toast(r.message||"انجام نشد");return;}
+      toast("ثبت شد");
+      if(S.instDetail)doInstOpen(S.instDetail.institute.id);
+      else if(S.userDetail)doUserOpen(S.userDetail.user.id);
+    });
+    return;
+  }
+  if(a==="memRemove"){
+    var midR=b.dataset.id;
+    if(!confirm("این عضویت کاملاً از این آموزشگاه حذف می‌شود (نه موقت، بر خلاف تعلیق). ادامه می‌دهید؟"))return;
+    if(!API.live){toast("در نسخهٔ نمایشی اعمال نمی‌شود.");return;}
+    call({action:"membership.remove",membershipId:midR}).then(function(r){
+      if(!r.ok){toast(r.message||"انجام نشد");return;}
+      toast("عضویت حذف شد");
+      if(S.instDetail)doInstOpen(S.instDetail.institute.id);
+      else if(S.userDetail)doUserOpen(S.userDetail.user.id);
+    });
+    return;
+  }
+
+  if(a==="impStart"){
+    S.reasonModal={userId:b.dataset.user,instituteId:b.dataset.inst,name:b.dataset.name};
+    render();
+    return;
+  }
+  if(a==="modalClose"){S.reasonModal=null;render();return;}
+  if(a==="impConfirm"){
+    if(S.busy)return;
+    var reasonTxt=(el("impReason")||{}).value||"";
+    if(reasonTxt.trim().length<5){toast("دلیل را کامل‌تر بنویسید");return;}
+    if(!API.live){toast("در نسخهٔ نمایشی لینکی ساخته نمی‌شود.");S.reasonModal=null;render();return;}
+    S.busy=true; render();
+    call({action:"impersonate.start",userId:S.reasonModal.userId,instituteId:S.reasonModal.instituteId,reason:reasonTxt.trim()})
+      .then(function(r){
+        S.busy=false; S.reasonModal=null; render();
+        if(!r.ok){toast(r.message||"ساخته نشد");return;}
+        window.open(r.url,"_blank","noopener");
+        toast("لینک باز شد — ۶۰ ثانیه اعتبار دارد");
+      });
+    return;
+  }
+});
+
+document.addEventListener("change",function(e){
+  if(e.target.id==="bCoverFile"){
+    blogUpload(e.target.files&&e.target.files[0],function(r){
+      blogRead(); S.blogEdit.cover=r.file; render();
+      toast("تصویر شاخص گذاشته شد");
+    });
+    return;
+  }
+  if(e.target.id==="bInlineFile"){
+    blogUpload(e.target.files&&e.target.files[0],function(r){
+      var body=el("bBody"); if(body)body.focus();
+      document.execCommand("insertHTML",false,
+        '<img src="'+r.url+'" alt="" width="'+r.width+'" height="'+r.height+'">');
+      blogRead();
+      toast("تصویر در متن گذاشته شد");
+    });
+    return;
+  }
+  var l=e.target.closest&&e.target.closest("[data-lead]");
+  if(l){
+    if(!API.live){toast("در نسخهٔ نمایشی ذخیره نمی‌شود.");return;}
+    call({action:"leadUpdate",id:l.dataset.lead,status:l.value}).then(function(r){
+      if(!r.ok){toast(r.message||"ثبت نشد");return;}
+      S.leads=null; need("leads").then(render); toast("وضعیت ثبت شد");
+    });
+    return;
+  }
+  var sr=e.target.closest&&e.target.closest("[data-setrole]");
+  if(sr){
+    if(!API.live){toast("در نسخهٔ نمایشی ذخیره نمی‌شود.");return;}
+    call({action:"membership.setRole",membershipId:sr.dataset.setrole,role:sr.value}).then(function(r){
+      if(!r.ok){toast(r.message||"تغییر نکرد");return;}
+      toast("نقش تغییر کرد");
+      if(S.instDetail)doInstOpen(S.instDetail.institute.id);
+      else if(S.userDetail)doUserOpen(S.userDetail.user.id);
+    });
+    return;
+  }
+});
+
+document.addEventListener("keydown",function(e){
+  if(e.key==="Enter"&&!API.admin&&e.target.tagName==="INPUT"){
+    var btn=document.querySelector("[data-a='login'],[data-a='setup']");
+    if(btn)btn.click();
+  }
+  if(e.key==="Enter"&&e.target.id==="instQ"){document.querySelector("[data-a='instSearch']").click();}
+  if(e.key==="Enter"&&e.target.id==="userQ"){
+    var ub=document.querySelector("[data-a='userFilter']"); if(ub)ub.click();}
+});
+
+/* ══════════ بالا آمدن ══════════ */
+function removeBoot(){var b=el("boot"); if(b)b.remove();}
+
+function startDemo(){
+  removeBoot();
+  API.live=false; API.admin={username:"demo",name:"نسخهٔ نمایشی"};
+  goView("dash");
+}
+
+if(!window.fetch||!window.Promise){startDemo();}
+else{
+  withTimeout(call({action:"me"}),4000).then(function(r){
+    removeBoot();
+    if(r&&r.ok&&r.authenticated){API.admin=r.admin; API.live=true; goView("dash");}
+    else if(r&&r.ok&&!r.authenticated){API.live=true; API.needsSetup=!!r.needsSetup; render();}
+    else{startDemo();}
+  });
+}
+})();
+</script>
+</body>
+</html>

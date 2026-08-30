@@ -64,7 +64,7 @@ $db->prepare('UPDATE otp_code SET pending_code = NULL WHERE pending_code IS NOT 
 
 $code = str_pad((string)random_int(0, 99999), 5, '0', STR_PAD_LEFT);
 $hash = hash_hmac('sha256', $phone . ':' . $code, (string)$c['otp_pepper']);
-$ttl  = otp_ttl();   // از تنظیمات پنل ادمین، نه ثابت در کد
+$ttl  = otp_ttl();   // از تنظیمات پنل سوپرادمین، نه ثابت در کد
 
 /*
  * در حالت پل، خودِ کد هم کنار هش نوشته می‌شود تا مدیر بتواند در پنل

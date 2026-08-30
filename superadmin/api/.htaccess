@@ -1,0 +1,15 @@
+# فقط super.php از بیرون قابل صداکردن است — این پنل از پنل آموزشگاه‌ها
+# هم حساس‌تر است، چون به دادهٔ همهٔ آموزشگاه‌ها دسترسی دارد.
+<FilesMatch "^(_bootstrap|_sms|_settings|_super|_platform_ctx|_schema|config|config\.sample)\.php$">
+  Require all denied
+</FilesMatch>
+<FilesMatch "\.(sql|md|log|bak|sample)$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header set Cache-Control "no-store"
+  Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
+Options -Indexes

@@ -8,7 +8,8 @@
  */
 declare(strict_types=1);
 require __DIR__ . '/_bootstrap.php';
-require __DIR__ . '/_ctx.php';
+require_once __DIR__ . '/_ctx.php';
+require_once __DIR__ . '/_perm.php';
 
 require_post();
 $in     = body_json();
@@ -16,12 +17,25 @@ $action = s_in($in, 'action', 40);
 
 const DAY_PATTERNS = ['فرد', 'زوج', 'پنجشنبه', 'جمعه', 'فشرده'];
 const MODES        = ['in_person', 'online', 'hybrid'];
-const PROVIDERS    = ['bbb', 'meet', 'skyroom', 'custom'];
+const PROVIDERS    = ['bbb', 'meet', 'skyroom', 'custom', 'jitsi'];
+
+/**
+ * لینک جلسه برای ارائه‌دهندهٔ انتخاب‌شده — جیتسی خودش می‌سازد (مدیر
+ * تایپ نمی‌کند)، بقیه همان لینکی که کلاینت فرستاده.
+ */
+function class_join_url(string $classId, string $provider, ?string $clientUrl): ?string
+{
+    if ($provider === 'jitsi') {
+        if (!jitsi_allowed()) fail(403, 'meeting_not_allowed', jitsi_denied_message());
+        return jitsi_room_url($classId);
+    }
+    return $clientUrl;
+}
 
 switch ($action) {
 
 case 'create':
-    require_role('manager');
+    require_perm('class.create');
     $name = s_in($in, 'name', 160);
     if ($name === '') fail(400, 'invalid', 'نام کلاس را وارد کنید.');
 
@@ -31,12 +45,16 @@ case 'create':
 
     $term = t_one('SELECT id FROM term WHERE __I__ AND status = ? ORDER BY starts_on DESC LIMIT 1', ['active']);
 
-    $id = new_id();
+    $id       = new_id();
+    $provider = enum_in($in, 'provider', PROVIDERS, 'meet');
+    $joinUrl  = class_join_url($id, $provider, join_url_in($in, 'joinUrl'));
+
     db()->prepare(
         'INSERT INTO klass (id, institute_id, term_id, name, level, teacher_user_id, room_id,
                             day_pattern, start_time, duration_min, capacity, total_sessions,
+                            starts_on, ends_on, midterm_on, final_on,
                             mode, provider, join_url, price, status, created_at)
-         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
+         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
     )->execute([
         $id, inst_id(), $term['id'] ?? null, $name, s_in($in, 'level', 40),
         $teacherId, $roomId ?: null,
@@ -45,9 +63,9 @@ case 'create':
         i_in($in, 'duration', 90, 15, 480),
         i_in($in, 'cap', 12, 1, 200),
         i_in($in, 'totalSessions', 20, 1, 60),
+        ...class_dates_in($in, null),
         enum_in($in, 'mode', MODES, 'in_person'),
-        enum_in($in, 'provider', PROVIDERS, 'meet'),
-        join_url_in($in, 'joinUrl'),
+        $provider, $joinUrl,
         i_in($in, 'price', 0, 0, 9999999999),
         'draft', now_utc(),
     ]);
@@ -55,7 +73,7 @@ case 'create':
     ok(['id' => $id]);
 
 case 'update':
-    require_role('manager');
+    require_perm('class.edit');
     $cl = own('klass', s_in($in, 'id', 32), 'کلاس');
 
     $teacherId = array_key_exists('teacherId', $in) ? member_or_null($in, 'teacherId', 'teacher') : $cl['teacher_user_id'];
@@ -68,9 +86,17 @@ case 'update':
         fail(409, 'capacity_below_enrolled', "ظرفیت را نمی‌شود کمتر از {$have} نفرِ ثبت‌نام‌شده گذاشت.");
     }
 
+    $provider = enum_in($in, 'provider', PROVIDERS, (string)$cl['provider']);
+    $joinUrl  = class_join_url(
+        (string)$cl['id'], $provider,
+        array_key_exists('joinUrl', $in) ? join_url_in($in, 'joinUrl') : $cl['join_url']
+    );
+
     db()->prepare(
         'UPDATE klass SET name=?, level=?, teacher_user_id=?, room_id=?, day_pattern=?, start_time=?,
-                          duration_min=?, capacity=?, total_sessions=?, mode=?, provider=?, join_url=?, price=?
+                          duration_min=?, capacity=?, total_sessions=?,
+                          starts_on=?, ends_on=?, midterm_on=?, final_on=?,
+                          mode=?, provider=?, join_url=?, price=?
           WHERE id=? AND institute_id=?'
     )->execute([
         s_in($in, 'name', 160) ?: (string)$cl['name'],
@@ -81,9 +107,9 @@ case 'update':
         i_in($in, 'duration', (int)$cl['duration_min'], 15, 480),
         $newCap,
         i_in($in, 'totalSessions', (int)$cl['total_sessions'], 1, 60),
+        ...class_dates_in($in, $cl),
         enum_in($in, 'mode', MODES, (string)$cl['mode']),
-        enum_in($in, 'provider', PROVIDERS, (string)$cl['provider']),
-        array_key_exists('joinUrl', $in) ? join_url_in($in, 'joinUrl') : $cl['join_url'],
+        $provider, $joinUrl,
         i_in($in, 'price', (int)$cl['price'], 0, 9999999999),
         $cl['id'], inst_id(),
     ]);
@@ -92,7 +118,7 @@ case 'update':
 
 /* ─────────── انتشار: جلسه‌ها ساخته می‌شوند ─────────── */
 case 'publish':
-    require_role('manager');
+    require_perm('class.edit');
     $cl = own('klass', s_in($in, 'id', 32), 'کلاس');
 
     if (empty($cl['teacher_user_id'])) {
@@ -116,7 +142,7 @@ case 'publish':
     ok(['sessions' => $made]);
 
 case 'delete':
-    require_role('manager');
+    require_perm('class.delete');
     $cl = own('klass', s_in($in, 'id', 32), 'کلاس');
     $n = (int)(t_one('SELECT COUNT(*) AS n FROM enrolment WHERE __I__ AND class_id = ? AND status = ?', [$cl['id'], 'active'])['n'] ?? 0);
     if ($n > 0) {
@@ -127,14 +153,14 @@ case 'delete':
     ok();
 
 case 'close':
-    require_role('manager');
+    require_perm('class.edit');
     $cl = own('klass', s_in($in, 'id', 32), 'کلاس');
     db()->prepare('UPDATE klass SET status = ? WHERE id = ? AND institute_id = ?')->execute(['closed', $cl['id'], inst_id()]);
     ok();
 
 /* ─────────── ثبت‌نام و حذف زبان‌آموز ─────────── */
 case 'enrol':
-    require_role('manager');
+    require_perm('enrolment.create');
     $cl  = own('klass', s_in($in, 'classId', 32), 'کلاس');
     $uid = s_in($in, 'studentId', 32);
 
@@ -155,7 +181,7 @@ case 'enrol':
     ok();
 
 case 'withdraw':
-    require_role('manager');
+    require_perm('enrolment.delete');
     $cl = own('klass', s_in($in, 'classId', 32), 'کلاس');
     // ردیف می‌ماند و فقط وضعیتش عوض می‌شود؛ حضور و نمرهٔ گذشته نباید گم شود
     db()->prepare('UPDATE enrolment SET status = ? WHERE class_id = ? AND student_user_id = ? AND institute_id = ?')
@@ -188,4 +214,48 @@ function member_or_null(array $in, string $key, string $role): ?string
     $m = t_one('SELECT user_id FROM membership WHERE __I__ AND user_id = ? AND role = ? AND status = ?', [$id, $role, 'active']);
     if (!$m) fail(404, 'not_found', 'مدرس پیدا نشد.');
     return (string)$m['user_id'];
+}
+
+/**
+ * چهار تاریخ کلاس، اعتبارسنجی‌شده و به ترتیبِ ستون‌ها.
+ *
+ * @param array|null $cur ردیف فعلی کلاس، یا null در ساخت
+ * @return array{0:?string,1:?string,2:?string,3:?string}
+ */
+function class_dates_in(array $in, ?array $cur): array
+{
+    $get = function (string $key, string $col) use ($in, $cur): ?string {
+        // در ویرایش، کلیدی که فرستاده نشده یعنی «دست نزن»؛ کلیدِ خالی
+        // یعنی «پاکش کن». این دو باید از هم جدا باشند، وگرنه هر ذخیرهٔ
+        // جزئی تاریخ‌های قبلی را می‌شوید.
+        if (!array_key_exists($key, $in)) return $cur ? ($cur[$col] ?? null) : null;
+        return date_in($in, $key);
+    };
+
+    $start = $get('startsOn',  'starts_on');
+    $end   = $get('endsOn',    'ends_on');
+    $mid   = $get('midtermOn', 'midterm_on');
+    $fin   = $get('finalOn',   'final_on');
+
+    /*
+     * ترتیب تاریخ‌ها بررسی می‌شود، نه فقط شکلشان.
+     *
+     * «پایان پیش از شروع» یا «آزمون پایان‌ترم پیش از میان‌ترم» غلط
+     * تایپی است، نه تصمیم. اگر همین‌جا نگیریمش، بعداً به شکل «۰ جلسه
+     * مانده» یا کارنامه‌ای با ترتیب وارونه بیرون می‌زند و کسی نمی‌فهمد
+     * از کجا آمده.
+     */
+    if ($start && $end && $end < $start) {
+        fail(400, 'bad_dates', 'تاریخ پایان کلاس نمی‌تواند پیش از شروع باشد.');
+    }
+    foreach ([['میان‌ترم', $mid], ['پایان‌ترم', $fin]] as [$label, $d]) {
+        if (!$d) continue;
+        if ($start && $d < $start) fail(400, 'bad_dates', "تاریخ آزمون {$label} پیش از شروع کلاس است.");
+        if ($end   && $d > $end)   fail(400, 'bad_dates', "تاریخ آزمون {$label} بعد از پایان کلاس است.");
+    }
+    if ($mid && $fin && $fin < $mid) {
+        fail(400, 'bad_dates', 'آزمون پایان‌ترم نمی‌تواند پیش از میان‌ترم باشد.');
+    }
+
+    return [$start, $end, $mid, $fin];
 }

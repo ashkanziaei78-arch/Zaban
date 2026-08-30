@@ -7,7 +7,7 @@
  */
 declare(strict_types=1);
 require __DIR__ . '/_bootstrap.php';
-require __DIR__ . '/_ctx.php';
+require_once __DIR__ . '/_ctx.php';
 
 require_post();
 $in = body_json();
@@ -30,8 +30,9 @@ if ($st->fetchColumn()) {
 $iid = bin2hex(random_bytes(16));
 $db->prepare('INSERT INTO institute (id, name, owner_user_id, created_at) VALUES (?,?,?,?)')
    ->execute([$iid, $name, $u['id'], now_utc()]);
-$db->prepare('INSERT INTO membership (id, institute_id, user_id, role, status, created_at) VALUES (?,?,?,?,?,?)')
-   ->execute([bin2hex(random_bytes(16)), $iid, $u['id'], 'manager', 'active', now_utc()]);
+$db->prepare('INSERT INTO membership (id, institute_id, user_id, role, role_id, status, can_host_meeting, created_at) VALUES (?,?,?,?,?,?,?,?)')
+   ->execute([bin2hex(random_bytes(16)), $iid, $u['id'], 'manager', system_role_id('manager'), 'active',
+              default_can_host_meeting('manager'), now_utc()]);
 
 audit('institute.created', (string)$u['id'], ['institute' => $iid, 'name' => $name]);
 ok(['instituteId' => $iid]);

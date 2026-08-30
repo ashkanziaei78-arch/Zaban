@@ -19,7 +19,8 @@
  */
 declare(strict_types=1);
 require __DIR__ . '/_bootstrap.php';
-require __DIR__ . '/_ctx.php';
+require_once __DIR__ . '/_ctx.php';
+require_once __DIR__ . '/_perm.php';
 
 require_post();
 $in     = body_json();
@@ -66,11 +67,21 @@ case 'list':
 
 /* ─────────── شروع جلسه ─────────── */
 case 'start':
-    require_role('manager', 'teacher');
+    require_perm('session.start_meeting');
     $s  = own('class_session', s_in($in, 'id', 32), 'جلسه');
     $cl = own_class((string)$s['class_id']);
 
     if ($s['status'] === 'cancelled') fail(409, 'cancelled', 'این جلسه لغو شده.');
+
+    /*
+     * جلسهٔ میت مجوز می‌خواهد. قاعده‌اش در jitsi_allowed() است، همان
+     * که classes.php هنگام ساخت کلاس صدا می‌زند — پیش از این هرکدام
+     * جداگانه تصمیم می‌گرفتند و نتیجه‌شان یکی نبود: اینجا مدیر را از
+     * کلید خاموشیِ آموزشگاه هم معاف می‌کرد.
+     */
+    if ((string)$cl['provider'] === 'jitsi' && !jitsi_allowed()) {
+        fail(403, 'meeting_not_allowed', jitsi_denied_message());
+    }
 
     // لینک: اگر مدرس لینک تازه داد همان، وگرنه لینک ثابت کلاس
     $url = join_url_in($in, 'joinUrl') ?? $s['join_url'] ?? $cl['join_url'];
@@ -97,6 +108,7 @@ case 'start':
     audit('session.started', my_id(), ['session' => $s['id'], 'class' => $cl['id']]);
     ok([
         'joinUrl'        => $url,
+        'provider'       => (string)$cl['provider'],
         'attendanceAuto' => attendance_auto((string)$cl['provider']),
         'roster'         => count($roster),
         'drafted'        => $made,
@@ -104,7 +116,7 @@ case 'start':
 
 /* ─────────── پایان جلسه ─────────── */
 case 'end':
-    require_role('manager', 'teacher');
+    require_perm('session.edit');
     $s  = own('class_session', s_in($in, 'id', 32), 'جلسه');
     own_class((string)$s['class_id']);
     db()->prepare('UPDATE class_session SET status = ?, ended_at = ? WHERE id = ? AND institute_id = ?')
@@ -113,7 +125,7 @@ case 'end':
     ok();
 
 case 'cancel':
-    require_role('manager', 'teacher');
+    require_perm('session.edit');
     $s = own('class_session', s_in($in, 'id', 32), 'جلسه');
     own_class((string)$s['class_id']);
     db()->prepare('UPDATE class_session SET status = ?, note = ? WHERE id = ? AND institute_id = ?')
@@ -146,16 +158,13 @@ case 'join':
 /* ─────────── جلسه‌های امروز، برای پیشخوان ─────────── */
 case 'today':
     $today = gmdate('Y-m-d');
-    $where = '';
-    $args  = [$today];
-    $role  = my_role();
-    if ($role === 'teacher') {
-        $where = ' AND k.teacher_user_id = ?';
-        $args[] = my_id();
-    } elseif ($role === 'student') {
-        $where = ' AND k.id IN (SELECT class_id FROM enrolment WHERE student_user_id = ? AND status = ?)';
-        $args[] = my_id(); $args[] = 'active';
-    }
+    /*
+     * محدوده از مجوز می‌آید، نه از نام نقش. شکل قبلی برای هر نقشی جز
+     * مدرس و زبان‌آموز هیچ فیلتری نمی‌گذاشت — یعنی اولین نقش سفارشی،
+     * جلسه‌های کل آموزشگاه را می‌دید.
+     */
+    [$where, $scopeArgs] = class_scope_sql(perm_scope('session.view') ?? 'own', 'k');
+    $args = array_merge([$today], $scopeArgs);
     $rows = t_all(
         "SELECT s.*, k.name AS class_name, k.provider, k.mode, k.join_url AS class_url
            FROM class_session s JOIN klass k ON k.id = s.class_id

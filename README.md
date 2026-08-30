@@ -42,6 +42,7 @@ sharpened. Read in order for the full picture; jump directly for a specific work
 | S | [استقرار روی زیرساخت ایران](docs/S-deployment.md) | Iranian hosting, OTP, BBB/Meet wiring, automatic recording upload |
 | T | [بالا آوردن سایت و پنل](docs/T-going-live.md) | Step-by-step for the real Plesk host: `talkora.ir` and the `panel.talkora.ir` subdomain with OTP over sms.ir |
 | **U** | **[چک‌لیست راه‌اندازی](docs/U-checklist.md)** | **Start here to deploy. 30 tasks in dependency order, six of them gating. Generated with the interactive version from `docs/build-checklist.py`.** |
+| V | [پنل سوپرادمین پلتفرم](docs/V-super-admin.md) | Standing up `admin.talkora.ir`: platform-wide institute/role management, impersonation, deploying the third package |
 | — | [CUSTOMIZE.md](CUSTOMIZE.md) | What to change before the site goes public: phone, prices, form endpoint |
 
 ---
@@ -198,6 +199,27 @@ with no way back in.
 
 ---
 
+## پنل سوپرادمین — `superadmin/`
+
+The platform-owner console, on its own subdomain (`admin.talkora.ir`) and its own zip package —
+see [V. Super-admin panel](docs/V-super-admin.md) for the full picture. Same design language as
+the old product admin panel it replaces, but a real superset: it can see and manage **every**
+institute, not just count them.
+
+| File | What it is |
+|---|---|
+| `superadmin/index.html` | The console — institutes, users & roles, impersonation, site settings, system health |
+| `superadmin/api/` | PHP backend sharing the panel's MySQL database, with its own session cookie (`tk_platform`) |
+
+What it can do: search/suspend institutes, grant or change a user's role (manager/teacher/
+student) at any institute, suspend a membership or a whole account, and — with a mandatory,
+audited reason — issue a short-lived, single-use link that logs a platform admin into a tenant
+user's session for support (`panel/api/impersonate.php`). What it deliberately can't do: read a
+tenant's actual content (students, grades, messages) without going through that impersonation
+flow, which is logged both when issued and when consumed.
+
+---
+
 ## کد سرور — `server/` و `infra/`
 
 Real code, not prototype. Verified, not assumed.
@@ -222,8 +244,8 @@ tenant set, and a cross-tenant INSERT is refused.
 
 ## استقرار — `build-dist.py`
 
-One command produces **two upload-ready packages**, because the site and the panel live on
-separate domains:
+One command produces **three upload-ready packages**, because the site, the panel, and the
+platform superadmin console live on three separate subdomains:
 
 ```bash
 python3 build-dist.py
@@ -233,15 +255,18 @@ python3 build-dist.py
 |---|---|---|
 | `dist/site/` → `talkora-site.zip` | `httpdocs` of `talkora.ir` | Static files only |
 | `dist/panel/` → `talkora-panel.zip` | `httpdocs` of `panel.talkora.ir` | PHP 8, MySQL, `curl` |
+| `dist/admin/` → `talkora-admin.zip` | `httpdocs` of `admin.talkora.ir` | PHP 8, MySQL — **same database as the panel** |
 
-Splitting them is not tidiness — it buys three concrete things:
+Splitting them is not tidiness — it buys concrete things:
 
-1. The session cookie is scoped to `panel.talkora.ir`. The public sales page, which everyone
-   loads, never carries an auth cookie.
+1. Each subdomain scopes its own session cookie (`tk_session` for tenant users, `tk_platform`
+   for the superadmin). The public sales page, which everyone loads, never carries an auth
+   cookie, and a leaked platform-admin session can't be confused with a tenant one.
 2. The marketing site never touches the database. If the panel 500s or the DB fills up, the
    page that sells the product is still up.
-3. Their security posture differs honestly: the panel gets `X-Frame-Options: DENY`, `noindex`,
-   and `no-store`; the site does not.
+3. Their security posture differs honestly: the panel and superadmin get `X-Frame-Options: DENY`,
+   `noindex`, and `no-store`; the site does not — and the superadmin package is the most
+   locked-down of the three, since it can see every tenant.
 
 Each zip carries its own Persian, step-by-step upload guide written against this specific
 Plesk host — nameservers, `httpdocs` (not `public_html`), the subdomain, the MySQL database,
@@ -249,13 +274,14 @@ Let's Encrypt, and an ordered test sequence.
 
 **Setup is a web installer, not a text editor.** After uploading, `panel.talkora.ir/setup/`
 probes the server (PHP version, `pdo_mysql`, `curl`, `mbstring`, writability, HTTPS), tests the
-database credentials before touching anything, creates the 20 tables, generates the OTP signing
+database credentials before touching anything, creates the 20+ tables, generates the OTP signing
 key itself, creates the admin account, and writes the config file — preferring a `private/`
 directory outside the webroot. It then locks itself: once a config file exists, every request
 including the harmless server probe is refused, and it will not create a second admin if one
 already exists in the database. An attacker cannot complete an install without the database
 password, which is the actual protection; the lock and the "delete `setup/`" instruction are
-the layers behind it.
+the layers behind it. That same admin account is what logs into `admin.talkora.ir` afterward —
+see [V. Super-admin panel](docs/V-super-admin.md).
 
 The schema also ships as `_نصب-آپلود-نکنید/پایگاه-داده.sql` for manual import if the installer
 ever fails, and inside `api/_schema.php` for the installer to read — a PHP file, never served

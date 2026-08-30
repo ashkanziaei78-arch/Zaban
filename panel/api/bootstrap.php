@@ -12,7 +12,7 @@
  */
 declare(strict_types=1);
 require __DIR__ . '/_bootstrap.php';
-require __DIR__ . '/_ctx.php';
+require_once __DIR__ . '/_ctx.php';
 
 $c    = ctx();
 $role = $c['role'];
@@ -126,6 +126,20 @@ foreach ($rows as $r) {
         'status'     => (string)$r['status'],
         'avg'        => $avgOf[$id] ?? null,
         'attendance' => $tot > 0 ? (int)round((($attPct[$id] ?? 0) / $tot) * 100) : null,
+
+        'startsOn'   => $r['starts_on'],
+        'endsOn'     => $r['ends_on'],
+        'midtermOn'  => $r['midterm_on'],
+        'finalOn'    => $r['final_on'],
+        /*
+         * «چند جلسه مانده» اینجا حساب می‌شود نه در مرورگر.
+         *
+         * جلسه‌های برگزارشده را فقط سرور می‌شمارد؛ اگر عدد را خام
+         * می‌فرستادیم، هر سه پنل باید همان تفریق را تکرار می‌کردند و
+         * روزی یکی‌شان با بقیه فرق می‌کرد.
+         */
+        'remaining'  => max(0, (int)$r['total_sessions'] - ($doneCount[$id] ?? 0)),
+        'expired'    => $r['ends_on'] !== null && (string)$r['ends_on'] < gmdate('Y-m-d'),
     ];
 }
 $classIds = array_column($classes, 'id');
@@ -246,6 +260,11 @@ if ($classIds) {
             'type'      => (string)$r['type'],
             'desc'      => $r['description'],
             'due'       => $r['due_at'],
+            // مهلت *مؤثر*؛ کارت تکلیف باید همان را بشمارد که ملاک
+            // دیرکرد است، نه مهلت اصلی
+            'extendedTo' => $r['extended_to'],
+            'extendNote' => $r['extend_note'],
+            'effective'  => $r['extended_to'] ?: $r['due_at'],
             'max'       => (int)$r['max_score'],
             'submitted' => $subCount[(string)$r['id']] ?? 0,
             'graded'    => $gradeCount[(string)$r['id']] ?? 0,
@@ -292,8 +311,28 @@ if ($role === 'manager') {
 
 $roleFa = ['manager' => 'مدیر آموزشگاه', 'teacher' => 'مدرس', 'student' => 'زبان‌آموز'];
 
+/*
+ * مجوزهای مؤثر و فهرست نقش‌ها به رابط داده می‌شوند تا منو و صفحه‌ها از
+ * روی مجوز ساخته شوند، نه از روی نام نقش. تا وقتی فرانت بنویسد «اگر
+ * مدیر است این را نشان بده»، ساخت نقش سفارشی یعنی رابطی که برایش خالی
+ * می‌ماند.
+ *
+ * contexts فقط وقتی بیش از یکی است که کاربر واقعاً چند نقش دارد؛ رابط
+ * انتخابگر را در همان حالت نشان می‌دهد.
+ */
+$ac       = active_context();
+$contexts = array_map(function ($o) use ($ac) {
+    $o['active'] = ($o['instituteId'] === $ac['institute_id'] && $o['roleId'] === $ac['role_id']);
+    return $o;
+}, context_options());
+
 ok([
     'role' => $role,
+    'permissions' => array_keys(effective_perms()),
+    'scopes'      => effective_perms(),
+    'contexts'    => $contexts,
+    'multiRole'   => count($contexts) > 1,
+    'readonly'    => is_readonly_institute(),
     'me'   => [
         'id'    => (string)$me['id'],
         'name'  => (string)$me['full_name'],
@@ -309,7 +348,20 @@ ok([
         'termStart' => $term ? (string)$term['starts_on'] : null,
         'week'  => $week,
         'weeks' => $term ? (int)$term['weeks'] : (int)$c['institute']['termWeeks'],
+        'jitsiEnabled' => $c['institute']['jitsiEnabled'],
     ],
+    /*
+     * jitsi_allowed() نه can_host_meeting()، تا پنل همان چیزی را نشان
+     * دهد که API واقعاً اجازه می‌دهد.
+     *
+     * پنل با همین مقدار تصمیم می‌گیرد «جلسهٔ میت» را در فهرست
+     * ارائه‌دهنده‌ها بگذارد یا نه. اگر پرچم خام را بفرستیم، مدیری که
+     * مجوز شخصی‌اش نوشته نشده (مهاجرت ۰۱۳ را ببینید) گزینه را اصلاً
+     * نمی‌بیند — با اینکه classes.php درخواستش را می‌پذیرفت. یعنی
+     * دقیقاً همان باگ، این‌بار یک لایه بالاتر.
+     */
+    'canHostMeeting' => jitsi_allowed(),
+    'jitsiDomain'    => jitsi_domain(),
     'classes'     => $classes,
     'students'    => $students,
     'teachers'    => $teachers,

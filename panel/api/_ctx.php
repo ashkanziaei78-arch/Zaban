@@ -22,6 +22,9 @@
 
 declare(strict_types=1);
 
+// ctx() روی active_context() می‌نشیند، پس موتور باید پیش از آن باشد
+require_once __DIR__ . '/_perm.php';
+
 if (realpath(__FILE__) === realpath((string)($_SERVER['SCRIPT_FILENAME'] ?? ''))) {
     http_response_code(404);
     exit;
@@ -43,32 +46,54 @@ function ctx(): array
 
     $u = require_user();
 
-    // عضویت فعال کاربر. اگر در چند آموزشگاه باشد، فعلاً اولی؛
-    // جابه‌جایی بین آموزشگاه‌ها وقتی لازم شد اضافه می‌شود.
+    /*
+     * آموزشگاه و نقش از زمینهٔ فعالِ نشست می‌آیند، نه از «اولین عضویت».
+     * پیش از چند-نقشی این دو یکی بودند؛ حالا نه. اگر اینجا هنوز اولی
+     * را برمی‌داشتیم، کاربری که به نقش دیگری سوییچ کرده بود همچنان
+     * دادهٔ نقش اول را می‌دید.
+     */
+    $ac = active_context();
+
     $st = db()->prepare(
-        'SELECT m.institute_id, m.role, i.name, i.term_weeks, i.city, i.phone
+        'SELECT m.institute_id, m.role, m.can_host_meeting,
+                i.name, i.term_weeks, i.city, i.phone, i.status, i.suspended_reason, i.jitsi_enabled
            FROM membership m
            JOIN institute i ON i.id = m.institute_id
-          WHERE m.user_id = ? AND m.status = ?
-          ORDER BY m.created_at ASC LIMIT 1'
+          WHERE m.user_id = ? AND m.institute_id = ? AND m.role_id = ? AND m.status = ?
+          LIMIT 1'
     );
-    $st->execute([$u['id'], 'active']);
+    $st->execute([$u['id'], $ac['institute_id'], $ac['role_id'], 'active']);
     $m = $st->fetch();
 
     if (!$m) {
         fail(403, 'no_institute', 'شما هنوز عضو هیچ آموزشگاهی نیستید. از مدیر آموزشگاه بخواهید با همین شماره دعوت‌تان کند.');
     }
 
+    /*
+     * تعلیق آموزشگاه توسط سوپرادمین (superadmin/) دقیقاً همین‌جا اثر
+     * می‌کند — چون هر نقطهٔ پایانی کسب‌وکاری (bootstrap.php و هرچه از
+     * t_all/t_one/own_* استفاده کند) از ctx() می‌گذرد. اگر این بررسی
+     * اینجا نبود، تعلیق فقط یک پرچم تزئینی در پنل سوپرادمین بود.
+     */
+    if ((string)$m['status'] === 'suspended') {
+        $reason = trim((string)($m['suspended_reason'] ?? ''));
+        fail(403, 'institute_suspended',
+            'دسترسی این آموزشگاه موقتاً معلق شده' . ($reason !== '' ? ': ' . $reason : '.')
+          . ' برای رفع مشکل با پشتیبانی تماس بگیرید.');
+    }
+
     $c = [
-        'user'         => $u,
-        'institute_id' => (string)$m['institute_id'],
-        'role'         => (string)$m['role'],
-        'institute'    => [
-            'id'        => (string)$m['institute_id'],
-            'name'      => (string)$m['name'],
-            'termWeeks' => (int)$m['term_weeks'],
-            'city'      => $m['city'],
-            'phone'     => $m['phone'],
+        'user'             => $u,
+        'institute_id'     => (string)$m['institute_id'],
+        'role'             => (string)$m['role'],
+        'can_host_meeting' => (bool)$m['can_host_meeting'],
+        'institute'        => [
+            'id'           => (string)$m['institute_id'],
+            'name'         => (string)$m['name'],
+            'termWeeks'    => (int)$m['term_weeks'],
+            'city'         => $m['city'],
+            'phone'        => $m['phone'],
+            'jitsiEnabled' => (bool)$m['jitsi_enabled'],
         ],
     ];
     return $c;
@@ -77,6 +102,55 @@ function ctx(): array
 function inst_id(): string { return ctx()['institute_id']; }
 function my_id(): string   { return (string)ctx()['user']['id']; }
 function my_role(): string { return ctx()['role']; }
+
+/**
+ * مجوز «ساخت/شروع جلسهٔ میت» — آبشاری: هم آموزشگاه باید فعالش کرده
+ * باشد (سوپرادمین)، هم خود عضویت باید مجوز داشته باشد (مدیر از ابتدا
+ * دارد، مدرس باید از مدیر بگیرد؛ سوپرادمین می‌تواند مجوز هرکسی را هم
+ * قطع کند — دقیقاً همین یک شرط دومی که آن را ممکن می‌کند).
+ *
+ * برای تصمیم‌گیری در کد، jitsi_allowed() در _perm.php را صدا بزنید،
+ * نه این را: آن محدودهٔ مجوز را هم حساب می‌کند. این تابع فقط پرچمِ
+ * خام است و جایی به کار می‌آید که فقط همان پرچم را می‌خواهید.
+ */
+function can_host_meeting(): bool
+{
+    $c = ctx();
+    return $c['institute']['jitsiEnabled'] && $c['can_host_meeting'];
+}
+
+/* ─────────── جلسهٔ میت (Jitsi) ─────────── */
+
+/**
+ * دامنهٔ سرور جیتسی — پیش‌فرض سرور عمومی و رایگان meet.jit.si. از
+ * site_setting خوانده می‌شود تا اگر روزی سرور اختصاصی گرفتید، فقط از
+ * پنل سوپرادمین عوض شود، نه با ویرایش کد (همان الگوی sms_conf() در
+ * _sms.php برای خواندن مستقیم یک تنظیم بدون بارکردن کل _settings.php).
+ */
+function jitsi_domain(): string
+{
+    static $d = null;
+    if ($d !== null) return $d;
+    $d = 'meet.jit.si';
+    try {
+        $st = db()->query("SELECT svalue FROM site_setting WHERE skey = 'jitsi_domain'");
+        $v = trim((string)($st->fetchColumn() ?: ''));
+        if ($v !== '') $d = $v;
+    } catch (Throwable $e) {
+        error_log('jitsi_domain read failed: ' . $e->getMessage());
+    }
+    return $d;
+}
+
+/**
+ * آدرس اتاق یک کلاس — همیشه یکی، برای کل عمر کلاس. classId خودش یک
+ * شناسهٔ تصادفی ۳۲ کاراکتری است (new_id())، پس حدس‌زدنی نیست و نیازی
+ * به رمز یا HMAC تازه نیست.
+ */
+function jitsi_room_url(string $classId): string
+{
+    return 'https://' . jitsi_domain() . '/talkora-' . $classId;
+}
 
 function require_role(string ...$roles): void
 {
@@ -166,7 +240,8 @@ function own(string $table, string $id, string $what = 'مورد'): array
     if ($id === '' || !preg_match('/^[a-f0-9]{32}$/', $id)) {
         fail(404, 'not_found', "$what پیدا نشد.");
     }
-    $allowed = ['klass', 'class_session', 'assignment', 'submission', 'enrolment', 'room', 'term', 'membership'];
+    $allowed = ['klass', 'class_session', 'assignment', 'submission', 'enrolment', 'room', 'term',
+                'membership', 'join_request'];
     if (!in_array($table, $allowed, true)) {
         error_log("own() روی جدول غیرمجاز: $table");
         fail(500, 'server_error', 'خطای داخلی.');
@@ -179,18 +254,35 @@ function own(string $table, string $id, string $what = 'مورد'): array
 }
 
 /** کلاسی که کاربر فعلی حق دیدنش را دارد */
-function own_class(string $id): array
+/**
+ * دروازهٔ مالکیت کلاس.
+ *
+ * پیش از نسخهٔ ۶ بر پایهٔ نام نقش تصمیم می‌گرفت. حالا محدودهٔ مجوز را
+ * می‌خواند، که برای سه نقش سیستمی دقیقاً همان نتیجه را می‌دهد
+ * (مدیر=institute، مدرس=own_classes، زبان‌آموز=own) ولی برای نقش
+ * سفارشی هم درست کار می‌کند — پیش از این هر نقش تازه به شاخهٔ
+ * زبان‌آموز می‌افتاد و دنبال ثبت‌نامی می‌گشت که هرگز نداشت.
+ *
+ * $perm مجوزی است که این دسترسی زیر سایهٔ آن انجام می‌شود؛ پیش‌فرض
+ * class.view یعنی «اجازهٔ دست‌زدن به این کلاس را دارم؟».
+ */
+function own_class(string $id, string $perm = 'class.view'): array
 {
     $c = own('klass', $id, 'کلاس');
-    $role = my_role();
-    if ($role === 'manager') return $c;
-    if ($role === 'teacher') {
+
+    $scope = perm_scope($perm) ?? 'own';
+
+    // آموزشگاه و بالاتر: شرط مستأجر را own() بسته، همین کافی است
+    if (scope_rank($scope) >= scope_rank('institute')) return $c;
+
+    if ($scope === 'own_classes' || $scope === 'assigned_students') {
         if ((string)$c['teacher_user_id'] !== my_id()) {
             fail(403, 'forbidden', 'این کلاس شما نیست.');
         }
         return $c;
     }
-    // زبان‌آموز فقط کلاسی که در آن ثبت‌نام کرده
+
+    // own — باید ثبت‌نام فعال داشته باشد
     $st = db()->prepare('SELECT 1 FROM enrolment WHERE class_id = ? AND student_user_id = ? AND status = ?');
     $st->execute([$id, my_id(), 'active']);
     if (!$st->fetchColumn()) fail(403, 'forbidden', 'شما در این کلاس ثبت‌نام نیستید.');

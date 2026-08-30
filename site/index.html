@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#070C14" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F7F3E8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131A17" media="(prefers-color-scheme: dark)">
 <title>تاکورا | سامانهٔ مدیریت آموزشگاه زبان</title>
 <meta name="description" content="تاکورا سامانهٔ یکپارچهٔ مدیریت آموزشگاه زبان است: ثبت‌نام، ترم‌بندی، حضور و غیاب، کلاس آنلاین، تکلیف و نمره، شهریهٔ قسطی و گزارش — همه در یک پنل فارسی.">
 <link rel="canonical" href="https://talkora.ir/">
@@ -15,7 +15,7 @@
 <meta property="og:title" content="تاکورا | سامانهٔ مدیریت آموزشگاه زبان">
 <meta property="og:description" content="تاکورا سامانهٔ یکپارچهٔ مدیریت آموزشگاه زبان است: ثبت‌نام، ترم‌بندی، حضور و غیاب، کلاس آنلاین، تکلیف و نمره، شهریهٔ قسطی و گزارش — همه در یک پنل فارسی.">
 <meta property="og:url" content="https://talkora.ir/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232563C7'/%3E%3Ctext x='32' y='45' font-size='38' font-family='Tahoma,sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3E%D8%AA%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%233F7D68'/%3E%3Ctext x='32' y='45' font-size='38' font-family='Tahoma,sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3E%D8%AA%3C/text%3E%3C/svg%3E">
 <link rel="preload" href="fonts/dana-regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/dana-bold.woff2" as="font" type="font/woff2" crossorigin>
 
@@ -32,61 +32,61 @@
 
 /* ---------- توکن‌ها ---------- */
 :root{
-  --paper:#F7F8FA;      --surface:#FFFFFF;    --surface-2:#F1F4F8;  --surface-3:#E8EDF4;
-  --ink:#0B1220;        --ink-2:#2C3A56;      --ink-3:#5A6A85;
-  --line:#E1E7EF;       --line-2:#CBD5E1;
-  --brand:#2563C7;      --brand-deep:#0F2A54; --brand-soft:#E9F0FB; --brand-ring:rgba(37,99,199,.32);
-  --accent:#D98324;     --accent-soft:#FBF0E1;
-  --ok:#0A7048;         --ok-soft:#E4F4EC;
-  --warn:#A65F00;       --warn-soft:#FBF1E0;
-  --bad:#B42318;        --bad-soft:#FCEAE8;
-  --shadow-sm:0 1px 2px rgba(11,18,32,.05), 0 2px 8px rgba(11,18,32,.05);
-  --shadow-md:0 8px 28px rgba(11,18,32,.09);
-  --shadow-lg:0 24px 60px rgba(11,18,32,.14);
+  --paper:#F7F3E8;      --surface:#FCFAF3;    --surface-2:#F1EBDC;  --surface-3:#E7E0CE;
+  --ink:#24352F;        --ink-2:#46574F;      --ink-3:#6B7C74;
+  --line:#DDE5DC;       --line-2:#C6D2C6;
+  --brand:#3F7D68;      --brand-deep:#2C5A4A; --brand-soft:#C9EDE1; --brand-mid:#A9DDC9; --accent-ink:#8A6520; --brand-ring:rgba(63,125,104,.32);
+  --accent:#E8C98F;     --accent-soft:#F6EBD5;
+  --ok:#1F7A52;         --ok-soft:#DCF0E6;
+  --warn:#8A6520;       --warn-soft:#F6EBD5;
+  --bad:#A83A2C;        --bad-soft:#F7E3DF;
+  --shadow-sm:0 1px 2px rgba(36,53,47,.05), 0 2px 8px rgba(36,53,47,.05);
+  --shadow-md:0 8px 28px rgba(36,53,47,.09);
+  --shadow-lg:0 24px 60px rgba(36,53,47,.14);
   --r-sm:6px; --r-md:10px; --r-lg:16px; --r-xl:22px;
   --maxw:1180px;
 }
 
 @media (prefers-color-scheme: dark){
   :root{
-    --paper:#080D16;     --surface:#111926;   --surface-2:#18222F; --surface-3:#212C3C;
-    --ink:#EEF3F9;       --ink-2:#B9C6D6;     --ink-3:#8496AC;
-    --line:#212C3C;      --line-2:#2E3A4C;
-    --brand:#6BA0EA;     --brand-deep:#C9DDF7; --brand-soft:#14243A; --brand-ring:rgba(107,160,234,.36);
-    --accent:#E9A24E;    --accent-soft:#2A1F11;
-    --ok:#43C08C;        --ok-soft:#0F2A21;
-    --warn:#DFA24A;      --warn-soft:#2A200F;
-    --bad:#F0736A;       --bad-soft:#2C1614;
+    --paper:#131A17;     --surface:#1B2420;   --surface-2:#222D28; --surface-3:#2B3832;
+    --ink:#ECF2EE;       --ink-2:#BFCCC5;     --ink-3:#8E9E96;
+    --line:#2B3832;      --line-2:#3A4A42;
+    --brand:#A9DDC9;     --brand-deep:#C9EDE1; --brand-soft:#1E322A; --brand-mid:#6FAF95; --accent-ink:#E8C98F; --brand-ring:rgba(169,221,201,.36);
+    --accent:#E8C98F;    --accent-soft:#2E2718;
+    --ok:#7FD1AC;        --ok-soft:#17332A;
+    --warn:#E0B96A;      --warn-soft:#2E2718;
+    --bad:#F0897E;       --bad-soft:#34201D;
     --shadow-sm:0 1px 2px rgba(0,0,0,.4);
     --shadow-md:0 8px 28px rgba(0,0,0,.5);
     --shadow-lg:0 24px 60px rgba(0,0,0,.6);
   }
 }
 :root[data-theme="dark"]{
-  --paper:#080D16;     --surface:#111926;   --surface-2:#18222F; --surface-3:#212C3C;
-  --ink:#EEF3F9;       --ink-2:#B9C6D6;     --ink-3:#8496AC;
-  --line:#212C3C;      --line-2:#2E3A4C;
-  --brand:#6BA0EA;     --brand-deep:#C9DDF7; --brand-soft:#14243A; --brand-ring:rgba(107,160,234,.36);
-  --accent:#E9A24E;    --accent-soft:#2A1F11;
-  --ok:#43C08C;        --ok-soft:#0F2A21;
-  --warn:#DFA24A;      --warn-soft:#2A200F;
-  --bad:#F0736A;       --bad-soft:#2C1614;
+  --paper:#131A17;     --surface:#1B2420;   --surface-2:#222D28; --surface-3:#2B3832;
+  --ink:#ECF2EE;       --ink-2:#BFCCC5;     --ink-3:#8E9E96;
+  --line:#2B3832;      --line-2:#3A4A42;
+  --brand:#A9DDC9;     --brand-deep:#C9EDE1; --brand-soft:#1E322A; --brand-mid:#6FAF95; --accent-ink:#E8C98F; --brand-ring:rgba(169,221,201,.36);
+  --accent:#E8C98F;    --accent-soft:#2E2718;
+  --ok:#7FD1AC;        --ok-soft:#17332A;
+  --warn:#E0B96A;      --warn-soft:#2E2718;
+  --bad:#F0897E;       --bad-soft:#34201D;
   --shadow-sm:0 1px 2px rgba(0,0,0,.4);
   --shadow-md:0 8px 28px rgba(0,0,0,.5);
   --shadow-lg:0 24px 60px rgba(0,0,0,.6);
 }
 :root[data-theme="light"]{
-  --paper:#F7F8FA;     --surface:#FFFFFF;   --surface-2:#F1F4F8; --surface-3:#E8EDF4;
-  --ink:#0B1220;       --ink-2:#2C3A56;     --ink-3:#5A6A85;
-  --line:#E1E7EF;      --line-2:#CBD5E1;
-  --brand:#2563C7;     --brand-deep:#0F2A54; --brand-soft:#E9F0FB; --brand-ring:rgba(37,99,199,.32);
-  --accent:#D98324;    --accent-soft:#FBF0E1;
-  --ok:#0A7048;        --ok-soft:#E4F4EC;
-  --warn:#A65F00;      --warn-soft:#FBF1E0;
-  --bad:#B42318;       --bad-soft:#FCEAE8;
-  --shadow-sm:0 1px 2px rgba(11,18,32,.05), 0 2px 8px rgba(11,18,32,.05);
-  --shadow-md:0 8px 28px rgba(11,18,32,.09);
-  --shadow-lg:0 24px 60px rgba(11,18,32,.14);
+  --paper:#F7F3E8;     --surface:#FCFAF3;   --surface-2:#F1EBDC; --surface-3:#E7E0CE;
+  --ink:#24352F;       --ink-2:#46574F;     --ink-3:#6B7C74;
+  --line:#DDE5DC;      --line-2:#C6D2C6;
+  --brand:#3F7D68;     --brand-deep:#2C5A4A; --brand-soft:#C9EDE1; --brand-mid:#A9DDC9; --accent-ink:#8A6520; --brand-ring:rgba(63,125,104,.32);
+  --accent:#E8C98F;    --accent-soft:#F6EBD5;
+  --ok:#1F7A52;        --ok-soft:#DCF0E6;
+  --warn:#8A6520;      --warn-soft:#F6EBD5;
+  --bad:#A83A2C;       --bad-soft:#F7E3DF;
+  --shadow-sm:0 1px 2px rgba(36,53,47,.05), 0 2px 8px rgba(36,53,47,.05);
+  --shadow-md:0 8px 28px rgba(36,53,47,.09);
+  --shadow-lg:0 24px 60px rgba(36,53,47,.14);
 }
 
 /* ---------- پایه ---------- */
@@ -129,12 +129,12 @@ body.lt{
   transition:background .16s ease, border-color .16s ease, color .16s ease, transform .16s ease;
 }
 .btn:active{transform:translateY(1px)}
-.btn--primary{background:var(--brand); color:#fff; border-color:var(--brand)}
+.btn.btn--primary{background:var(--brand); color:#fff; border-color:var(--brand)}
 :root[data-theme="dark"] .btn--primary,
-:root[data-theme="dark"] .btn--primary:hover{color:#08111F}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn--primary{color:#08111F}}
+:root[data-theme="dark"] .btn--primary:hover{color:#131A17}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn--primary{color:#131A17}}
 .btn--primary:hover{background:var(--brand-deep); border-color:var(--brand-deep)}
-:root[data-theme="dark"] .btn--primary:hover{background:#8FB9F0; border-color:#8FB9F0}
+:root[data-theme="dark"] .btn--primary:hover{background:#C9EDE1; border-color:#C9EDE1}
 .btn--ghost{background:var(--surface); color:var(--ink); border-color:var(--line-2)}
 .btn--ghost:hover{background:var(--surface-2); border-color:var(--ink-3)}
 .btn--sm{min-block-size:38px; padding-inline:15px; font-size:14px}
@@ -152,7 +152,7 @@ body.lt{
   background:linear-gradient(150deg, var(--brand) 0%, var(--brand-deep) 100%);
   display:grid; place-items:center; color:#fff; font-size:15px; font-weight:700;
 }
-:root[data-theme="dark"] .logo-mark{background:linear-gradient(150deg,#3E7FD8 0%,#1B3E6E 100%); color:#EAF2FD}
+:root[data-theme="dark"] .logo-mark{background:linear-gradient(150deg,#5FA084 0%,#2C5A4A 100%); color:#E7F5EE}
 .nav{display:flex; gap:4px; margin-inline-start:14px}
 .nav a{padding:8px 13px; border-radius:var(--r-sm); font-size:15px; color:var(--ink-2); transition:background .15s, color .15s}
 .nav a:hover{background:var(--surface-2); color:var(--ink)}
@@ -273,7 +273,7 @@ body.lt{
 .pain p{margin-top:10px; font-size:13.5px; color:var(--ink-3); line-height:1.8}
 
 /* ---------- ستون فقرات ترم ---------- */
-.spine{background:var(--brand-deep); color:#EAF1FB; position:relative; overflow:hidden}
+.spine{background:var(--brand-deep); color:#E7F5EE; position:relative; overflow:hidden}
 :root[data-theme="dark"] .spine{background:var(--surface); border-block:1px solid var(--line); color:var(--ink)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .spine{background:var(--surface); border-block:1px solid var(--line); color:var(--ink)}}
 .spine .eyebrow{color:var(--accent)}
@@ -285,7 +285,7 @@ body.lt{
 .spine-track{display:grid; grid-template-columns:repeat(6, minmax(178px,1fr)); gap:0; min-inline-size:1080px; position:relative}
 .spine-track::before{
   content:""; position:absolute; inset-block-start:41px; inset-inline:14px; block-size:2px;
-  background:rgba(234,241,251,.18);
+  background:rgba(231,245,238,.18);
 }
 :root[data-theme="dark"] .spine-track::before{background:var(--line-2)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .spine-track::before{background:var(--line-2)}}
@@ -378,8 +378,8 @@ body.lt{
 .next-card .n{font-size:15px; font-weight:700; margin-top:5px}
 .next-card .m{font-size:12.5px; color:var(--ink-3); margin-top:3px}
 .next-card .b{margin-top:11px; background:var(--brand); color:#fff; text-align:center; padding:9px; border-radius:var(--r-sm); font-size:13px; font-weight:700}
-:root[data-theme="dark"] .next-card .b{color:#08111F}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .next-card .b{color:#08111F}}
+:root[data-theme="dark"] .next-card .b{color:#131A17}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .next-card .b{color:#131A17}}
 .pay-card{margin:0 10px 10px; background:var(--warn-soft); border:1px solid color-mix(in srgb,var(--warn) 30%, transparent); border-radius:var(--r-md); padding:13px}
 .pay-card .t{font-size:11.5px; color:var(--warn); font-weight:700}
 .pay-card .n{font-size:16px; font-weight:700; margin-top:5px}
@@ -395,7 +395,7 @@ body.lt{
 @media (max-width:600px){.iran-grid{grid-template-columns:1fr}}
 .ir{border:1px solid var(--line); border-radius:var(--r-lg); padding:19px; background:var(--paper)}
 .ir h4{font-size:15.5px; display:flex; align-items:center; gap:8px}
-.ir h4 .tag{font-size:11px; font-weight:700; color:var(--accent); background:var(--accent-soft); padding:2px 8px; border-radius:100px}
+.ir h4 .tag{font-size:11px; font-weight:700; color:var(--accent-ink); background:var(--accent-soft); padding:2px 8px; border-radius:100px}
 .ir p{margin-top:9px; font-size:13.5px; color:var(--ink-3); line-height:1.85}
 
 /* ---------- تعرفه ---------- */
@@ -425,8 +425,8 @@ body.lt{
   position:absolute; inset-block-start:-11px; left:50%; transform:translateX(-50%);
   background:var(--brand); color:#fff; font-size:11.5px; font-weight:700; padding:3px 13px; border-radius:100px; white-space:nowrap;
 }
-:root[data-theme="dark"] .plan-badge{color:#08111F}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .plan-badge{color:#08111F}}
+:root[data-theme="dark"] .plan-badge{color:#131A17}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .plan-badge{color:#131A17}}
 .plan h3{font-size:17px}
 .plan .for{font-size:13px; color:var(--ink-3); margin-top:4px; min-block-size:38px}
 .plan .price{margin-top:14px; display:flex; align-items:baseline; gap:6px}
@@ -457,7 +457,7 @@ body.lt{
 .faq .a{padding:0 4px 19px; color:var(--ink-2); font-size:14.5px; line-height:1.95; max-width:74ch}
 
 /* ---------- فرم دمو ---------- */
-.cta-sec{background:var(--brand-deep); color:#EAF1FB}
+.cta-sec{background:var(--brand-deep); color:#E7F5EE}
 :root[data-theme="dark"] .cta-sec{background:var(--surface); border-block:1px solid var(--line); color:var(--ink)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cta-sec{background:var(--surface); border-block:1px solid var(--line); color:var(--ink)}}
 .cta-grid{display:grid; grid-template-columns:1fr 1.05fr; gap:clamp(28px,4vw,56px); align-items:start}
@@ -659,7 +659,7 @@ body.lt{
 .js-rv .rv.in{opacity:1; transform:none}
 .notice-bar{background:var(--brand-deep);color:#fff;text-align:center;padding:9px 16px;
             font-size:13.5px;line-height:1.7}
-:root[data-theme="dark"] .notice-bar{color:#07111F}
+:root[data-theme="dark"] .notice-bar{color:#131A17}
 
 @media (prefers-reduced-motion:reduce){
   .js-rv .rv{opacity:1; transform:none; transition:none}
@@ -688,8 +688,8 @@ body.lt{
       <button class="icon-btn" id="theme" aria-label="تغییر حالت روشن و تاریک" title="حالت روشن / تاریک">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
       </button>
-      <a href="#login" class="btn btn--ghost btn--sm">ورود</a>
-      <a href="#signup" class="btn btn--primary btn--sm">ثبت‌نام</a>
+      <a href="https://panel.talkora.ir/" class="btn btn--ghost btn--sm">ورود</a>
+      <a href="https://panel.talkora.ir/#/signup" class="btn btn--primary btn--sm">ثبت‌نام</a>
       <button class="icon-btn burger" id="burger" aria-label="منو" aria-expanded="false">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
@@ -703,8 +703,8 @@ body.lt{
     <li><a href="#iran">ویژه ایران</a></li>
     <li><a href="#pricing">تعرفه</a></li>
     <li><a href="#faq">سوال‌ها</a></li>
-    <li><a href="#login">ورود</a></li>
-    <li><a href="#signup">ثبت‌نام آموزشگاه</a></li>
+    <li><a href="https://panel.talkora.ir/">ورود</a></li>
+    <li><a href="https://panel.talkora.ir/#/signup">ثبت‌نام آموزشگاه</a></li>
     <li><a href="#demo">درخواست دمو</a></li>
   </ul>
 </nav>
@@ -721,7 +721,7 @@ body.lt{
           کارت به کارت، پیامک خدماتی و روزهای زوج و فرد.
         </p>
         <div class="hero-cta">
-          <a href="#signup" class="btn btn--primary btn--lg">ثبت‌نام رایگان آموزشگاه</a>
+          <a href="https://panel.talkora.ir/#/signup" class="btn btn--primary btn--lg">ثبت‌نام رایگان آموزشگاه</a>
           <a href="#demo" class="btn btn--ghost btn--lg">درخواست دموی رایگان</a>
         </div>
         <div class="hero-note">
@@ -1493,8 +1493,8 @@ body.lt{
           <li><a href="#pricing">تعرفه</a></li>
           <li><a href="#iran">ویژه ایران</a></li>
           <li><a href="#demo">درخواست دمو</a></li>
-          <li><a href="#login">ورود به پنل</a></li>
-          <li><a href="#signup">ثبت‌نام آموزشگاه</a></li>
+          <li><a href="https://panel.talkora.ir/">ورود به پنل</a></li>
+          <li><a href="https://panel.talkora.ir/#/signup">ثبت‌نام آموزشگاه</a></li>
         </ul>
       </div>
       <div>
@@ -1646,7 +1646,7 @@ body.lt{
     });
   });
 
-  /* ---------- تنظیمات از پنل ادمین ----------
+  /* ---------- تنظیمات از پنل سوپرادمین ----------
      سایت با مقدارهای نوشته‌شده در خودش بالا می‌آید و بعد اگر بک‌اند
      باشد آن‌ها را با مقدار واقعی جایگزین می‌کند. این ترتیب عمدی است:
      اگر PHP بمیرد یا هنوز نصب نشده باشد، صفحه سالم می‌ماند و فقط

@@ -1,20 +1,15 @@
 <?php
 /**
- * ورود ادمین محصول — جدا از کاربران آموزشگاه‌ها.
+ * تنظیمات سایت (قیمت، تماس، متن‌ها، پیامک) و ارسال ایمیل.
  *
- * ═══ چرا نام کاربری و رمز، و نه پیامک؟ ═══
+ * این فایل عمداً از منطق نشست/ورود سوپرادمین جداست — چون سایت معرفی
+ * (`public.php`، بدون هیچ ورودی) هم برای نمایش قیمت و فرستادن ایمیل
+ * درخواست دمو به همین توابع نیاز دارد. اگر این‌ها داخل فایل نشست
+ * سوپرادمین می‌ماندند، سایت معرفی مجبور می‌شد کل منطق ورود ادمین را
+ * هم بارگذاری کند — بی‌ربط و یک سطح دسترسی اضافه‌ای که لازم نیست.
  *
- * کاربران آموزشگاه با کد یک‌بارمصرف وارد می‌شوند چون شمارهٔ موبایل
- * چیزی است که همه دارند و همه به آن دسترسی دارند. ولی ادمینِ محصول
- * یک نفر است و اگر تنها کلید سامانه شمارهٔ موبایلش باشد، یک سیم‌کارت
- * سوخته یا اعتبار تمام‌شدهٔ پنل پیامک یعنی قفل‌شدن از کل محصول.
- *
- * پس: نام کاربری و رمز، با این محافظت‌ها:
- *   - رمز با password_hash ذخیره می‌شود، خودش هرگز نوشته نمی‌شود
- *   - سقف ۱۰ تلاش در ساعت برای هر نام کاربری و هر IP
- *   - پاسخ برای «کاربر نیست» و «رمز غلط» یکسان است
- *   - تأخیر ثابت روی تلاش ناموفق، تا زمان پاسخ اطلاعاتی ندهد
- *   - کوکی نشستِ جدا از کاربران عادی، با نام و مسیر متفاوت
+ * خوانده و نوشته می‌شود توسط: public.php (سایت، فقط خواندن + ایمیل)،
+ * و superadmin/api/super.php (نوشتن از پنل سوپرادمین).
  */
 
 declare(strict_types=1);
@@ -23,71 +18,6 @@ if (realpath(__FILE__) === realpath((string)($_SERVER['SCRIPT_FILENAME'] ?? ''))
     http_response_code(404);
     exit;
 }
-
-const ADMIN_COOKIE   = 'tk_admin';
-const ADMIN_TTL_DAYS = 7;      // کوتاه‌تر از کاربران عادی: دسترسی حساس‌تر است
-
-function admin_issue_session(string $adminId): string
-{
-    $token = bin2hex(random_bytes(32));
-    db()->prepare(
-        'INSERT INTO admin_session (token_hash, admin_id, expires_at, ip, user_agent, created_at)
-         VALUES (?,?,?,?,?,?)'
-    )->execute([
-        hash('sha256', $token), $adminId, now_utc(ADMIN_TTL_DAYS * 86400),
-        client_ip(), mb_substr((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 250), now_utc(),
-    ]);
-
-    setcookie(ADMIN_COOKIE, $token, [
-        'expires'  => time() + ADMIN_TTL_DAYS * 86400,
-        'path'     => '/',
-        'secure'   => is_https(),
-        'httponly' => true,
-        'samesite' => 'Strict',   // پنل ادمین هیچ‌وقت از سایت دیگری صدا زده نمی‌شود
-    ]);
-    return $token;
-}
-
-function current_admin(): ?array
-{
-    $token = $_COOKIE[ADMIN_COOKIE] ?? '';
-    if ($token === '' || !preg_match('/^[a-f0-9]{64}$/', $token)) return null;
-
-    $st = db()->prepare(
-        'SELECT a.id, a.username, a.full_name, a.status
-           FROM admin_session s JOIN admin_user a ON a.id = s.admin_id
-          WHERE s.token_hash = ? AND s.expires_at > ? AND s.revoked_at IS NULL'
-    );
-    $st->execute([hash('sha256', $token), now_utc()]);
-    $a = $st->fetch();
-    if (!$a || $a['status'] !== 'active') return null;
-
-    db()->prepare('UPDATE admin_session SET last_seen_at = ? WHERE token_hash = ?')
-        ->execute([now_utc(), hash('sha256', $token)]);
-    return $a;
-}
-
-function require_admin(): array
-{
-    $a = current_admin();
-    if (!$a) fail(401, 'unauthenticated', 'ابتدا وارد شوید.');
-    return $a;
-}
-
-function admin_revoke(): void
-{
-    $token = $_COOKIE[ADMIN_COOKIE] ?? '';
-    if ($token !== '' && preg_match('/^[a-f0-9]{64}$/', $token)) {
-        db()->prepare('UPDATE admin_session SET revoked_at = ? WHERE token_hash = ?')
-            ->execute([now_utc(), hash('sha256', $token)]);
-    }
-    setcookie(ADMIN_COOKIE, '', [
-        'expires' => time() - 3600, 'path' => '/',
-        'secure' => is_https(), 'httponly' => true, 'samesite' => 'Strict',
-    ]);
-}
-
-/* ─────────── تنظیمات سایت ─────────── */
 
 /**
  * مقدارهای پیش‌فرض. هر کلیدی که اینجا نباشد از بیرون قابل نوشتن نیست —
@@ -123,7 +53,7 @@ function setting_defaults(): array
 
         // ── پیامک ──
         /*
-         * 'bridge' یعنی پیامکی فرستاده نمی‌شود و کد ورود در همین پنل
+         * 'bridge' یعنی پیامکی فرستاده نمی‌شود و کد ورود در پنل سوپرادمین
          * دیده می‌شود؛ 'smsir' یعنی ارسال واقعی. کلید و شناسهٔ قالب
          * اینجا هم می‌آیند تا بدون FTP قابل تغییر باشند. هیچ‌کدام از
          * این چهار کلید در فهرست عمومی public.php نیست.
@@ -143,6 +73,13 @@ function setting_defaults(): array
          * تلاش و محدودیت نرخ، در پنج دقیقه هم قابل حدس‌زدن نیست.
          */
         'otp_ttl'           => '300',
+
+        /*
+         * دامنهٔ سرور جیتسی برای پنل میت. پیش‌فرض سرور عمومی و رایگان
+         * است — اگر روزی سرور اختصاصی گرفتید، فقط همین مقدار عوض
+         * می‌شود، کد جایی تغییر نمی‌کند.
+         */
+        'jitsi_domain'      => 'meet.jit.si',
 
         // ── نمادها ──
         'enamad_html'      => '',

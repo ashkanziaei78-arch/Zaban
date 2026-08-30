@@ -11,3 +11,15 @@ panel/api/config.php
 private/talkora-config.php
 dist/
 *.zip
+
+# ریخت‌وپاش انتشار — پوشهٔ استخراج‌شدهٔ بسته و فایل آزمایش FTP
+talkora-panel/
+talkora-site/
+talkora-admin/
+upload-test.txt
+.claude/
+superadmin/api/config.php
+
+# site/api/ در ساخت بسته از panel/api/ کپی می‌شود؛ نسخهٔ محلی‌اش فقط
+# برای بالا آوردن سرور آزمون سایت است و نباید دو نسخه در مخزن بماند
+site/api/

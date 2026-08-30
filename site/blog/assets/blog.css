@@ -1,0 +1,178 @@
+/* وبلاگ تاکورا
+ *
+ * فایل جدا از سایت اصلی، عمداً.
+ *
+ * شیوه‌نامهٔ سایت درون خودِ index.html است و ۱۱۰ کیلوبایت HTML را با
+ * خودش می‌آورد؛ نوشتهٔ وبلاگ فقط بخش کوچکی از آن را لازم دارد. فایل
+ * جدا یعنی مرورگر یک‌بار می‌گیردش و برای همهٔ نوشته‌ها نگه می‌دارد —
+ * که برای سایتی با ده‌ها صفحهٔ محتوایی، تفاوت واقعی در سرعت است. و
+ * سرعت، خودش عامل رتبه است.
+ *
+ * توکن‌ها همان توکن‌های سایت‌اند تا وبلاگ وصله به نظر نرسد.
+ */
+
+@font-face{font-family:"Dana";src:url("../../fonts/dana-light.woff2") format("woff2");
+  font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:"Dana";src:url("../../fonts/dana-regular.woff2") format("woff2");
+  font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Dana";src:url("../../fonts/dana-bold.woff2") format("woff2");
+  font-weight:700;font-style:normal;font-display:swap}
+
+:root{
+  --paper:#F7F3E8;      --surface:#FCFAF3;    --surface-2:#F1EBDC;  --surface-3:#E7E0CE;
+  --ink:#24352F;        --ink-2:#46574F;      --ink-3:#6B7C74;
+  --line:#DDE5DC;       --line-2:#C6D2C6;
+  --brand:#3F7D68;      --brand-deep:#2C5A4A; --brand-soft:#C9EDE1;
+  --accent:#E8C98F;     --accent-soft:#F6EBD5;
+  --shadow-sm:0 1px 2px rgba(36,53,47,.05), 0 2px 8px rgba(36,53,47,.05);
+  --shadow-md:0 8px 28px rgba(36,53,47,.09);
+  --r-sm:6px; --r-md:10px; --r-lg:16px;
+  --maxw:1120px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#131A17;   --surface:#1B2420;   --surface-2:#222D28; --surface-3:#2B3832;
+    --ink:#ECF2EE;     --ink-2:#BFCCC5;     --ink-3:#8E9E96;
+    --line:#2B3832;    --line-2:#3A4A42;
+    --brand:#A9DDC9;   --brand-deep:#C9EDE1; --brand-soft:#1E322A;
+    --accent:#E8C98F;  --accent-soft:#2E2718;
+    --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+    --shadow-md:0 8px 28px rgba(0,0,0,.5);
+  }
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:"Dana",system-ui,"Segoe UI",Tahoma,sans-serif;
+  background:var(--paper);color:var(--ink);line-height:1.9;
+  font-size:16px;-webkit-font-smoothing:antialiased}
+a{color:var(--brand-deep);text-decoration:none}
+a:hover{text-decoration:underline}
+img{max-inline-size:100%;height:auto;display:block}
+.num{font-variant-numeric:tabular-nums}
+
+.skip{position:absolute;inset-inline-start:-9999px}
+.skip:focus{inset-inline-start:12px;inset-block-start:12px;z-index:99;
+  background:var(--surface);padding:10px 14px;border-radius:var(--r-md);box-shadow:var(--shadow-md)}
+
+.wrap{max-inline-size:var(--maxw);margin-inline:auto;padding-inline:20px}
+.wrap.narrow{max-inline-size:720px}
+
+/* ───── سربرگ ───── */
+.top{border-block-end:1px solid var(--line);background:var(--surface);
+  position:sticky;inset-block-start:0;z-index:20}
+.top .wrap{display:flex;align-items:center;gap:18px;min-block-size:62px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:17px;color:var(--ink)}
+.brand:hover{text-decoration:none}
+.mark{inline-size:30px;block-size:30px;border-radius:9px;background:var(--brand-deep);
+  color:#F7F3E8;display:grid;place-items:center;font-size:15px}
+.top nav{margin-inline-start:auto;display:flex;align-items:center;gap:16px;font-size:14.5px}
+.top nav a{color:var(--ink-2)}
+.top nav .cta{background:var(--brand-deep);color:#F7F3E8;padding:8px 15px;
+  border-radius:100px;font-weight:700}
+.top nav .cta:hover{text-decoration:none;filter:brightness(1.08)}
+
+/* ───── سرِ صفحه ───── */
+.crumbs{font-size:13px;color:var(--ink-3);padding-block:18px 4px}
+.crumbs a{color:var(--ink-3)}
+.page-h{padding-block:10px 22px}
+.page-h h1{font-size:clamp(26px,4vw,38px);line-height:1.5;letter-spacing:-.01em}
+.page-h p{color:var(--ink-2);margin-block-start:8px;max-inline-size:62ch}
+
+.chips{display:flex;gap:8px;flex-wrap:wrap;padding-block-end:24px}
+.chips a{padding:7px 14px;border-radius:100px;border:1px solid var(--line-2);
+  font-size:13.5px;color:var(--ink-2);background:var(--surface)}
+.chips a:hover{border-color:var(--brand);text-decoration:none}
+.chips a.on{background:var(--brand-soft);border-color:var(--brand);color:var(--brand-deep);font-weight:700}
+
+/* ───── کارت ───── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(288px,1fr));
+  gap:20px;padding-block-end:36px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  overflow:hidden;display:flex;flex-direction:column;transition:.16s}
+.card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.card .thumb{display:block;aspect-ratio:16/9;background:var(--surface-2);overflow:hidden}
+.card .thumb img{inline-size:100%;block-size:100%;object-fit:cover}
+.card .body{padding:16px 17px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card .cat{align-self:flex-start;font-size:11.5px;font-weight:700;color:var(--brand-deep);
+  background:var(--brand-soft);padding:3px 10px;border-radius:100px}
+.card h2{font-size:17.5px;line-height:1.7}
+.card h2 a{color:var(--ink)}
+.card p{font-size:13.5px;color:var(--ink-2);line-height:1.85;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card .meta{margin-block-start:auto;padding-block-start:6px;display:flex;gap:12px;
+  font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+.pager{display:flex;gap:6px;justify-content:center;padding-block:8px 44px;flex-wrap:wrap}
+.pager a{min-inline-size:38px;text-align:center;padding:8px 12px;border-radius:var(--r-md);
+  border:1px solid var(--line-2);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pager a.on{background:var(--brand-deep);border-color:var(--brand-deep);color:#F7F3E8;font-weight:700}
+.pager a:hover{text-decoration:none;border-color:var(--brand)}
+
+.empty{text-align:center;padding:64px 20px;color:var(--ink-2)}
+.empty h1,.empty h2{font-size:22px;margin-block-end:8px;color:var(--ink)}
+
+.btn{display:inline-block;background:var(--brand-deep);color:#F7F3E8;padding:11px 22px;
+  border-radius:100px;font-weight:700;font-size:15px}
+.btn:hover{text-decoration:none;filter:brightness(1.08)}
+
+/* ───── نوشته ───── */
+.post{padding-block-end:20px}
+.post h1{font-size:clamp(25px,4.4vw,38px);line-height:1.55;letter-spacing:-.01em;
+  padding-block:6px 12px}
+.post-meta{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink-3);
+  padding-block-end:16px;border-block-end:1px solid var(--line);
+  font-variant-numeric:tabular-nums}
+.lede{font-size:18px;line-height:1.95;color:var(--ink-2);padding-block:20px 4px}
+
+.cover{margin-block:26px;max-inline-size:1000px;margin-inline:auto;padding-inline:20px}
+.cover img{inline-size:100%;border-radius:var(--r-lg);aspect-ratio:1200/630;object-fit:cover}
+
+/*
+ * متن نوشته.
+ *
+ * قواعد به فرزندانِ .narrow می‌خورند چون بدنه HTML خام است و کلاسی
+ * روی عنصرهایش نیست — نویسنده در ویرایشگر فقط h2 و p و ul می‌زند.
+ */
+.wrap.narrow h2{font-size:24px;line-height:1.6;padding-block:30px 10px}
+.wrap.narrow h3{font-size:19.5px;line-height:1.65;padding-block:22px 8px}
+.wrap.narrow p{padding-block-end:16px;font-size:16.5px;line-height:2.05}
+.wrap.narrow ul,.wrap.narrow ol{padding-inline-start:24px;padding-block-end:16px}
+.wrap.narrow li{padding-block-end:7px;line-height:1.95}
+.wrap.narrow img{border-radius:var(--r-md);margin-block:12px}
+.wrap.narrow figure{margin-block:20px}
+.wrap.narrow figcaption{font-size:13px;color:var(--ink-3);text-align:center;padding-block-start:8px}
+.wrap.narrow blockquote{border-inline-start:3px solid var(--brand);padding-inline-start:16px;
+  margin-block:18px;color:var(--ink-2);font-size:17px}
+.wrap.narrow pre{background:var(--surface-2);padding:14px 16px;border-radius:var(--r-md);
+  overflow-x:auto;direction:ltr;text-align:left;font-size:13.5px;margin-block:16px}
+.wrap.narrow code{background:var(--surface-2);padding:2px 6px;border-radius:5px;
+  font-size:.92em;direction:ltr;display:inline-block}
+.wrap.narrow pre code{background:none;padding:0}
+.wrap.narrow table{inline-size:100%;border-collapse:collapse;margin-block:18px;font-size:14.5px}
+.wrap.narrow th,.wrap.narrow td{border:1px solid var(--line);padding:9px 12px;text-align:start}
+.wrap.narrow th{background:var(--surface-2);font-weight:700}
+.wrap.narrow hr{border:none;border-block-start:1px solid var(--line);margin-block:28px}
+
+.related{padding-block:36px 8px}
+.related h2{font-size:21px;padding-block-end:16px}
+
+.cta-box{text-align:center;padding-block:40px 56px}
+.cta-box h2{font-size:23px;padding-block-end:8px}
+.cta-box p{color:var(--ink-2);padding-block-end:18px}
+
+/* ───── پاورقی ───── */
+.foot{border-block-start:1px solid var(--line);background:var(--surface);
+  padding-block:34px 28px;margin-block-start:24px}
+.foot .cols{display:flex;gap:56px;flex-wrap:wrap;padding-block-end:22px}
+.foot b{display:block;font-size:14px;padding-block-end:10px}
+.foot ul{list-style:none}
+.foot li{padding-block-end:7px;font-size:14px}
+.foot a{color:var(--ink-2)}
+.fine{font-size:12.5px;color:var(--ink-3);border-block-start:1px solid var(--line);
+  padding-block-start:18px}
+
+@media (max-width:560px){
+  .top nav{gap:12px;font-size:13.5px}
+  .foot .cols{gap:32px}
+}

@@ -9,26 +9,35 @@
 @font-face{font-family:"Dana";src:url("../fonts/dana-regular.woff2") format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:"Dana";src:url("../fonts/dana-bold.woff2") format("woff2");font-weight:700;font-display:swap}
 
+/*
+ * --on-brand رنگ متنی است که روی خود --brand می‌نشیند. جدا نگه داشتنش
+ * لازم است چون در حالت روشن، برند سبز عمیق است و متن سفید می‌خواهد؛
+ * در حالت تیره برند سبز پاستیلی می‌شود و متن سفید رویش خوانده نمی‌شود
+ * (نسبت ۱.۵) و باید تیره شود. با توکن، دکمه فقط یک قاعده دارد.
+ */
 :root{
-  --paper:#F4F6F9; --surface:#FFFFFF; --surface-2:#F1F4F8;
-  --ink:#0B1220; --ink-2:#2C3A56; --ink-3:#5A6A85;
-  --line:#E1E7EF; --brand:#2563C7; --brand-2:#1B4FA8; --brand-soft:#E9F0FB;
-  --ok:#0A7048; --ok-soft:#E4F4EC; --warn:#A65F00; --warn-soft:#FBF1E0;
-  --bad:#B3261E; --bad-soft:#FCE9E7; --ring:rgba(37,99,199,.28);
+  --paper:#F7F3E8; --surface:#FCFAF3; --surface-2:#F1EBDC;
+  --ink:#24352F; --ink-2:#4A5B54; --ink-3:#71827A;
+  --line:#DDE5DC; --brand:#3F7D68; --brand-2:#2C5A4A; --brand-soft:#C9EDE1;
+  --on-brand:#FCFAF3;
+  --ok:#2E7D5B; --ok-soft:#DCF0E6; --warn:#8A6520; --warn-soft:#F6EBD5;
+  --bad:#A8452F; --bad-soft:#F4E2DD; --ring:rgba(63,125,104,.28);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --paper:#0B1220; --surface:#131C2E; --surface-2:#1A2438;
-  --ink:#EEF3FA; --ink-2:#C3CEDF; --ink-3:#8C9BB4;
-  --line:#26324A; --brand:#5C93E8; --brand-2:#8FB6F0; --brand-soft:#16233C;
-  --ok:#54C79A; --ok-soft:#0F2A22; --warn:#DFA24A; --warn-soft:#2A200F;
-  --bad:#F08A82; --bad-soft:#2E1512;
+  --paper:#131A17; --surface:#1B2420; --surface-2:#222D28;
+  --ink:#ECF2EE; --ink-2:#BFCCC5; --ink-3:#8E9E96;
+  --line:#2B3832; --brand:#A9DDC9; --brand-2:#C9EDE1; --brand-soft:#1E322A;
+  --on-brand:#131A17;
+  --ok:#6FCFA6; --ok-soft:#163024; --warn:#E8C98F; --warn-soft:#2E2718;
+  --bad:#E08A75; --bad-soft:#33201B; --ring:rgba(169,221,201,.32);
 }}
 :root[data-theme="dark"]{
-  --paper:#0B1220; --surface:#131C2E; --surface-2:#1A2438;
-  --ink:#EEF3FA; --ink-2:#C3CEDF; --ink-3:#8C9BB4;
-  --line:#26324A; --brand:#5C93E8; --brand-2:#8FB6F0; --brand-soft:#16233C;
-  --ok:#54C79A; --ok-soft:#0F2A22; --warn:#DFA24A; --warn-soft:#2A200F;
-  --bad:#F08A82; --bad-soft:#2E1512;
+  --paper:#131A17; --surface:#1B2420; --surface-2:#222D28;
+  --ink:#ECF2EE; --ink-2:#BFCCC5; --ink-3:#8E9E96;
+  --line:#2B3832; --brand:#A9DDC9; --brand-2:#C9EDE1; --brand-soft:#1E322A;
+  --on-brand:#131A17;
+  --ok:#6FCFA6; --ok-soft:#163024; --warn:#E8C98F; --warn-soft:#2E2718;
+  --bad:#E08A75; --bad-soft:#33201B; --ring:rgba(169,221,201,.32);
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -39,7 +48,7 @@ body{font-family:"Dana",system-ui,"Segoe UI",Tahoma,sans-serif;background:var(--
 
 .wrap{max-inline-size:760px;margin-inline:auto}
 .head{display:flex;align-items:center;gap:12px;margin-block-end:22px}
-.mark{inline-size:42px;block-size:42px;border-radius:12px;background:var(--brand);color:#fff;
+.mark{inline-size:42px;block-size:42px;border-radius:12px;background:var(--brand);color:var(--on-brand);
   display:grid;place-items:center;font-weight:700;font-size:20px;flex:none}
 .head h1{font-size:20px;line-height:1.4}
 .head p{font-size:13px;color:var(--ink-3)}
@@ -68,7 +77,7 @@ body{font-family:"Dana",system-ui,"Segoe UI",Tahoma,sans-serif;background:var(--
   border:1px solid transparent;cursor:pointer;background:var(--surface-2);color:var(--ink);
   display:inline-flex;align-items:center;gap:7px}
 .btn:disabled{opacity:.55;cursor:default}
-.btn--p{background:var(--brand);color:#fff}
+.btn--p{background:var(--brand);color:var(--on-brand)}
 .btn--p:hover:not(:disabled){background:var(--brand-2)}
 .btn--g{border-color:var(--line)}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -223,8 +232,11 @@ function viewDb(){
 function viewAdmin(){
   return h`
   <div class="note note--i">
-    این حساب برای <b>پنل ادمین محصول</b> است — جایی که قیمت‌ها، متن‌های سایت و
-    ایمیل مقصد را عوض می‌کنید. ربطی به حساب آموزشگاه‌ها ندارد؛ آن‌ها با پیامک وارد می‌شوند.
+    این حساب برای <b>پنل سوپرادمین پلتفرم</b> است — جایی که آموزشگاه‌ها، نقش کاربرها،
+    قیمت‌ها، متن‌های سایت و ایمیل مقصد را عوض می‌کنید. ربطی به حساب آموزشگاه‌ها ندارد؛
+    آن‌ها با پیامک وارد می‌شوند. این پنل روی زیردامنهٔ جدای <code>admin.talkora.ir</code>
+    بالا می‌آید — بستهٔ جداگانه‌ای دارد (talkora-admin.zip) که بعد از این نصب‌کننده
+    طبق راهنمای خودش آپلود می‌کنید؛ همین‌جا فقط حساب کاربری‌اش ساخته می‌شود.
   </div>
   <div class="card">
     <div class="card-h"><h2>۳ — حساب مدیر</h2></div>
@@ -250,7 +262,7 @@ function viewAdmin(){
         <div class="fld"><label for="adEmail">ایمیل دریافت درخواست دمو</label>
           <input id="adEmail" data-f="ad.email" type="email" dir="ltr" style="text-align:end"
                  placeholder="info@talkora.ir" value="${esc(S.ad.email)}">
-          <span class="hint">بعداً از پنل ادمین قابل تغییر است</span></div>
+          <span class="hint">بعداً از پنل سوپرادمین قابل تغییر است</span></div>
         <div class="fld"><label for="adPhone">تلفن نمایشی سایت</label>
           <input id="adPhone" data-f="ad.phone" type="tel" dir="ltr" style="text-align:end"
                  placeholder="اختیاری" value="${esc(S.ad.phone)}"></div>
@@ -281,18 +293,20 @@ function viewDone(){
         <li><b>پوشهٔ <code>setup</code> را پاک کنید.</b>
           در پلسک → File Manager، همین پوشه‌ای که این صفحه از آن باز شده.
           نصب‌کننده از حالا هر درخواستی را رد می‌کند، ولی نگه‌داشتنش دلیلی ندارد.</li>
-        <li><b>وارد پنل ادمین شوید</b> — <a href="../admin/">../admin/</a> با
-          ${d.username?h`نام کاربری <code>${esc(d.username)}</code>`:"همان حسابی که از قبل ساخته بودید"}.</li>
+        <li><b>بستهٔ پنل سوپرادمین را هم بالا بیاورید</b> — talkora-admin.zip را طبق
+          راهنمای خودش روی زیردامنهٔ <a href="https://admin.talkora.ir/" target="_blank" rel="noopener">admin.talkora.ir</a>
+          بریزید، بعد با ${d.username?h`نام کاربری <code>${esc(d.username)}</code>`:"همان حسابی که از قبل ساخته بودید"}
+          وارد شوید. جدول‌ها همین الان ساخته شدند؛ آنجا نصب‌کننده‌ای دوباره اجرا نمی‌شود.</li>
         <li><b>سربرگ «سلامت سامانه» را باز کنید.</b> هرچه قرمز بود همان‌جا نوشته چطور درست می‌شود.</li>
         <li><b>ورود را امتحان کنید</b> — <a href="../">صفحهٔ پنل آموزشگاه‌ها</a>، شمارهٔ موبایل خودتان.
-          کد در سربرگ «ورود و پیامک» پنل ادمین ظاهر می‌شود.</li>
+          کد در سربرگ «ورود و پیامک» پنل سوپرادمین ظاهر می‌شود.</li>
       </ol>
     </div>
   </div>
 
   <div class="note note--w">
     <b>پیامک هنوز روشن نیست.</b> سامانه در «حالت پل» است: همه‌چیز کار می‌کند،
-    ولی کد ورود به‌جای پیامک در پنل ادمین دیده می‌شود. وقتی قالب sms.ir تأیید شد،
+    ولی کد ورود به‌جای پیامک در پنل سوپرادمین دیده می‌شود. وقتی قالب sms.ir تأیید شد،
     کلید و شناسهٔ قالب را در سربرگ «ورود و پیامک» بگذارید و حالت را عوض کنید.
     نیازی به دست‌زدن به هیچ فایلی نیست.
   </div>`;
@@ -311,7 +325,7 @@ function viewInstalled(){
         (<code>private/talkora-config.php</code> یا <code>api/config.php</code>) را پاک کنید.
         این کار سامانه را تا پایان نصب تازه از کار می‌اندازد.</p>
       <div class="row" style="margin-block-start:16px">
-        <a class="btn btn--p" href="../admin/">پنل ادمین</a>
+        <a class="btn btn--p" href="https://admin.talkora.ir/" target="_blank" rel="noopener">پنل سوپرادمین</a>
         <a class="btn btn--g" href="../">پنل آموزشگاه‌ها</a>
       </div>
     </div>
